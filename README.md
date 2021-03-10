@@ -154,19 +154,7 @@ CloudWatch logs will need to be separately removed.
 -----
 ## Total Cost of Ownership <a name=tco></a>
 
-  
-| Service                | Details/Breakdown    | Pricing     | Expected Cost/month     |
-| ----------------------------- | ------------- | ------------- | ------------- | 
-| Amazon ES           | 2 * t3.medium         | $0.073/hr per instance | $105.12 |
-| Amazon ES Storage  | EBS GP2 storage, 100GB/instance         | $0.135 per GB / Month | $27 |
-| EC2    | 1 * t3.nano instance to acts as proxy and access kibana         | $0.0052/hr | $3.744 |
-| EC2 storage     | EBS GP2, 10GB         |  $0.135 per GB / Month | $1.35 |
-| CloudWatch        | approx 110,000 API calls would be made for each domain at 5 min interval       | $0.01 per 1,000 metrics requested using GetMetricData API | $33/domain |
-| Lambda       | 288 request will be fired per day with 5 min interval        | 1,000,000 free requests per month | $0 |
-| DynamoDB  | Storing 1 record per domain which is in Bytes, will not corss the free storage provided by AWS       | First 25 GB stored per month is free | $0 |
-| SNS       | E-mail will be triggered only when there is something unusual, estimations are done by considering 1000 trigger in a month        | $2.00 per 100,000 notifications | $0.02 |
-| NatGateway | Enable private subnet to connect to the internet | $0.045 per NAT Gateway Hour and $0.045 per GB Data Processed by NAT Gateways | 48.48 |
-|| *Note: This cost does not account for Ultra Warm and Dedicated master node, adding the same will have an effect on TCO* | *Total Cost (to monitor 1 domain, add $33 per additional domain in your account per month)*| $218.714 / Month (Effectively $7.3/day) |
+Running this solution will incur charges of less than $10 per day for one domain with additional $2 per day for each additional domain.
 
 -----
 ## Reporting Bugs
