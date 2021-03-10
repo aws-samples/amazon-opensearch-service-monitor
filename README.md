@@ -43,9 +43,9 @@ At a bash terminal session.
 
 ```bash
 # clone the repo
-$ git clone https://github.com/Prashant-AtAWS/monitoring-cdk
+$ git clone https://github.com/aws-samples/amazon-elasticsearch-service-monitor.git
 # move to directory
-$ cd monitoring-cdk
+$ cd amazon-elasticsearch-service-monitor
 ```
 
 ![Clone Repo](/images/cdk_monitoring_clone.png)
