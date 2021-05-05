@@ -71,7 +71,7 @@ class MonitoringCdkStack(core.Stack):
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
 
         domain = es.Domain(self, 'cdk-monitoring-domain', 
-                    version=es.ElasticsearchVersion.V7_9, # Upgrade when CDK upgrades
+                    version=es.ElasticsearchVersion.of('7.10'), # Upgrade when CDK upgrades
                     domain_name=DOMAIN_NAME,
                     capacity=es.CapacityConfig(data_node_instance_type=DOMAIN_DATA_NODE_INSTANCE_TYPE,
                                                 data_nodes=DOMAIN_DATA_NODE_INSTANCE_COUNT,

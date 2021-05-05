@@ -77,7 +77,7 @@ Create the CDK configuration by bootstrapping the CDK.
 ## Deploy <a name="deploy"></a>
 Use the AWS CDK to deploy monitoring-cdk stack for Amazon ES. This stack comprises of creating/deploying below components:
 1. Create VPC with 3 AZ
-2. Create and launch Amazon ES cluster with two t3.medium data nodes with 100GB of EBS storage volume. 2 nodes spreads across 2 different AZ's
+2. Create and launch Amazon ES cluster (version 7.10) having two t3.medium data nodes with 100GB of EBS storage volume. These 2 nodes are spread across 2 different AZ's
 3. Create Dynamo DB table for timestamp tracking 
 4. Create lambda function to fetch Cloudwatch metrics across all regions and all domains. By default it fetches the data every 5 min, which can be changed if needed. 
 5. Create and launch an EC2 instance which acts as SSH tunnel to access kibana, as all of our setup is secured and in VPC
