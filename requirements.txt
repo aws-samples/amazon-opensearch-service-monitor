@@ -73,5 +73,5 @@ six==1.15.0
 toml==0.10.2
 troposphere==2.6.3
 typing-extensions==3.7.4.3
-urllib3==1.26.4
+urllib3==1.26.5
 wrapt==1.12.1
