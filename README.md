@@ -82,7 +82,7 @@ Use the AWS CDK to deploy monitoring-cdk stack for Amazon ES. This stack compris
 7. Create and setup default e-mail alerts to newly launched Amazon ES cluster
 8. Create Index template and Index State Management (ISM) policy to delete indices older than 366 days. (can be changed to different retention if needed)
 9. Monitoring stack has an option to enable Ultra Warm (UW) which is disabled by default, Change settings [in this file](monitoring_cdk/monitoring_cdk_stack.py) to enable UW.
-10. Create lambda function to fetch Cloudwatch metrics and Clouswatch logs across all regions and all domains.
+10. Create lambda function to fetch Cloudwatch metrics and Cloudwatch logs across all regions.
 
 
 #### Note: Complete stack gets setup with pre-defined configuration defined in [monitoring_cdk_stack.py](monitoring_cdk/monitoring_cdk_stack.py), please review the settings such as e-mail, instance type, username, password before proceeding to deploy. You can also enable UW and dedicated master (if needed)
@@ -106,7 +106,7 @@ The CDK will prompt to apply Security Changes, input "y" for Yes.
   Once stack is deployed successfully you need to create subscription filter and assign them to Lambda. Run [postCDK.py](monitoring_cdk/postCDK.py) to create the subscription filter (assuming the CW log groups with prefix as /aws/aes/domains), if there is any change in prefix please make sure to change above file before running the steps as below.
     
 ```bash
-(.env)$ python3 postCDK.py deploy
+(.env)$ python3 monitoring_cdk/postCDK.py deploy
 ```
 ![Terminal - Post Deploy CDK](/images/cdk_monitoring_post_deploy.png)
 -----
@@ -159,7 +159,7 @@ To clean up the stacks. destroy the monitoring-cdk stack, all other stacks will 
 To remove subscription for Cloudwatch logs run the script as below. This will traverse the Amazon ES cloudwatch logs and delete any filter which has been created during the deploy.
 
 ```bash
-(.env)$ python3 postCDK.py destroy
+(.env)$ python3 monitoring_cdk/postCDK.py destroy
 ```
 ![Terminal - Post Destroy CDK](/images/cdk_monitoring_post_destroy.png)
 -----
