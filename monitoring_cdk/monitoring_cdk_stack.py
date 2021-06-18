@@ -250,7 +250,7 @@ class MonitoringCdkStack(core.Stack):
         sns_role.add_managed_policy(sns_policy)
 
         dirname = os.path.dirname(__file__)
-        kibana_asset = Asset(self, "KibanaAsset", path=os.path.join(dirname, 'export_kibana_dashboards_V7_9.ndjson'))
+        kibana_asset = Asset(self, "KibanaAsset", path=os.path.join(dirname, 'export_kibana_dashboards_V7_10.ndjson'))
         kibana_asset.grant_read(instance.role)
         kibana_asset_path = instance.user_data.add_s3_download_command(
             bucket=kibana_asset.bucket,
@@ -277,7 +277,7 @@ class MonitoringCdkStack(core.Stack):
             "yum install jq -y",
             "amazon-linux-extras install nginx1.12",
             "cd /tmp/assets",
-            "mv {} export_kibana_dashboards_V7_9.ndjson".format(kibana_asset_path),
+            "mv {} export_kibana_dashboards_V7_10.ndjson".format(kibana_asset_path),
             "mv {} nginx_kibana.conf".format(nginx_asset_path),
             "mv {} create_alerts.sh".format(alerting_asset_path),
 
