@@ -283,6 +283,7 @@ class MonitoringCdkStack(core.Stack):
 
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
             "cp nginx_kibana.conf /etc/nginx/conf.d/",
+            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /tmp/assets/export_kibana_dashboards_V7_10.ndjson",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /etc/nginx/conf.d/nginx_kibana.conf",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /tmp/assets/create_alerts.sh",
             "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_cw_logs.role.role_arn + "=g' /tmp/assets/create_alerts.sh",
@@ -290,7 +291,7 @@ class MonitoringCdkStack(core.Stack):
             "sed -i 's/SNS_TOPIC_ARN/" + sns_topic.topic_arn + "/g' /tmp/assets/create_alerts.sh",
             "sed -i 's=DOMAIN_ADMIN_UNAME=" + DOMAIN_ADMIN_UNAME + "=g' /tmp/assets/create_alerts.sh",
             "sed -i 's=DOMAIN_ADMIN_PW=" + DOMAIN_ADMIN_PW + "=g' /tmp/assets/create_alerts.sh",
-            
+
             "systemctl restart nginx.service",
             "chmod 500 create_alerts.sh",
             "sleep 5",
