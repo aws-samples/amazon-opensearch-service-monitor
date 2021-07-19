@@ -15,9 +15,12 @@ from aws_cdk import (
     aws_sns_subscriptions as subscriptions,    
     core
 )
-import os.path
 from aws_cdk.aws_s3_assets import Asset
-
+import boto3
+import fileinput
+import json
+import os
+import sys
 
 # Jump host specific settings, change key name if you need an existing key to be used
 EC2_KEY_NAME='aes_cdk_monitoring'
@@ -37,7 +40,15 @@ DOMAIN_DATA_NODE_INSTANCE_TYPE='t3.medium.elasticsearch'
 DOMAIN_DATA_NODE_INSTANCE_COUNT=2
 DOMAIN_INSTANCE_VOLUME_SIZE=100
 DOMAIN_AZ_COUNT=2
-REGIONS_TO_MONITOR='["us-east-1", "us-east-2", "us-west-1", "us-west-2", "af-south-1", "ap-east-1", "ap-south-1", "ap-northeast-1", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1", "eu-central-1", "eu-west-1", "eu-west-2", "eu-west-3", "eu-north-1", "eu-south-1", "me-south-1",   "sa-east-1"]'
+
+# Excluded regions ap-east-1, af-south-1, eu-south-1, and the me-south-1 as they are not enabled by default, change this if those are enabled in your account
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+REGIONS_TO_MONITOR='["us-east-1", "us-east-2", "us-west-1", "us-west-2", "ap-south-1", "ap-northeast-1", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1", "eu-central-1", "eu-west-1", "eu-west-2", "eu-west-3", "eu-north-1", "sa-east-1"]'
+# Set REGIONS_TO_MONITOR in postCDK.py
+for line in fileinput.input("monitoring_cdk/postCDK.py", inplace=True):
+    if line.strip().startswith('REGIONS_TO_MONITOR='):
+        line = 'REGIONS_TO_MONITOR=\''+REGIONS_TO_MONITOR+'\'\n'
+    sys.stdout.write(line)
 
 ## By default monitoring stack will be setup without dedicated master node, to have dedicated master node in stack do change the number of nodes and type (if needed)
 ## Maximum Master Instance count supported by service is 5, so either have 3 or 5 dedicated node for master
@@ -105,7 +116,6 @@ class MonitoringCdkStack(core.Stack):
                         value=DOMAIN_ADMIN_PW,
                         description="Master User Password for Amazon ES domain")
 
-
         ################################################################################
         # Dynamo DB table for time stamp tracking
         table = ddb.Table(self, 'monitoring-lambda-timestamp',
@@ -159,6 +169,38 @@ class MonitoringCdkStack(core.Stack):
             targets=[event_lambda_target])
 
         ################################################################################
+        # Lambda for CW Logs
+        lambda_func_cw_logs = lambda_.Function(
+            self, 'LogsToElasticsearch',
+            function_name="LogsToElasticsearch_aes-cdk-monitoring",
+            runtime = lambda_.Runtime.NODEJS_12_X,
+            code=lambda_.Code.asset('LogsToElasticsearch'),
+            handler='index.handler',
+            vpc=vpc
+        )
+
+        # Load Amazon ES Domain to env variable
+        lambda_func_cw_logs.add_environment('DOMAIN_ENDPOINT', domain.domain_endpoint)
+
+        # When the domain is created here, restrict access
+        lambda_func_cw_logs.add_to_role_policy(iam.PolicyStatement(actions=['es:*'],
+            resources=['*']))
+
+        # The function needs to read CW Logs. Restrict
+        lambda_func_cw_logs.add_to_role_policy(iam.PolicyStatement(actions=['logs:*'],
+            resources=['*']))
+
+        # Add permission to create CW logs trigger for all specified region and current account, as region does not have an option to be wildcard
+        account_id = boto3.client("sts").get_caller_identity()["Account"]
+        for region in json.loads(REGIONS_TO_MONITOR):
+            lambda_func_cw_logs.add_permission(
+                id="lambda-cw-logs-permission-" + region,
+                principal=iam.ServicePrincipal("logs.amazonaws.com"),
+                action="lambda:InvokeFunction",
+                source_arn="arn:aws:logs:" + region + ":" + account_id + ":*:*:*"
+            )
+
+        ################################################################################
         # Jump host for SSH tunneling and direct access
         sn_public = ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
  
@@ -172,7 +214,8 @@ class MonitoringCdkStack(core.Stack):
         # Instance Role and SSM Managed Policy
         role = iam.Role(self, "InstanceSSM", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
         role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AmazonEC2RoleforSSM"))
- 
+        role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
+  
         instance = ec2.Instance(self, 'instance',
                                 instance_type=ec2.InstanceType(EC2_INSTANCE_TYPE),
                                 vpc=vpc,
@@ -207,7 +250,7 @@ class MonitoringCdkStack(core.Stack):
         sns_role.add_managed_policy(sns_policy)
 
         dirname = os.path.dirname(__file__)
-        kibana_asset = Asset(self, "KibanaAsset", path=os.path.join(dirname, 'export_kibana_dashboards_V7_9.ndjson'))
+        kibana_asset = Asset(self, "KibanaAsset", path=os.path.join(dirname, 'export_kibana_dashboards_V7_10.ndjson'))
         kibana_asset.grant_read(instance.role)
         kibana_asset_path = instance.user_data.add_s3_download_command(
             bucket=kibana_asset.bucket,
@@ -234,19 +277,21 @@ class MonitoringCdkStack(core.Stack):
             "yum install jq -y",
             "amazon-linux-extras install nginx1.12",
             "cd /tmp/assets",
-            "mv {} export_kibana_dashboards_V7_9.ndjson".format(kibana_asset_path),
+            "mv {} export_kibana_dashboards_V7_10.ndjson".format(kibana_asset_path),
             "mv {} nginx_kibana.conf".format(nginx_asset_path),
             "mv {} create_alerts.sh".format(alerting_asset_path),
 
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
             "cp nginx_kibana.conf /etc/nginx/conf.d/",
+            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /tmp/assets/export_kibana_dashboards_V7_10.ndjson",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /etc/nginx/conf.d/nginx_kibana.conf",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /tmp/assets/create_alerts.sh",
+            "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_cw_logs.role.role_arn + "=g' /tmp/assets/create_alerts.sh",
             "sed -i 's=SNS_ROLE_ARN=" + sns_role.role_arn + "=g' /tmp/assets/create_alerts.sh",
             "sed -i 's/SNS_TOPIC_ARN/" + sns_topic.topic_arn + "/g' /tmp/assets/create_alerts.sh",
             "sed -i 's=DOMAIN_ADMIN_UNAME=" + DOMAIN_ADMIN_UNAME + "=g' /tmp/assets/create_alerts.sh",
             "sed -i 's=DOMAIN_ADMIN_PW=" + DOMAIN_ADMIN_PW + "=g' /tmp/assets/create_alerts.sh",
-            
+
             "systemctl restart nginx.service",
             "chmod 500 create_alerts.sh",
             "sleep 5",
