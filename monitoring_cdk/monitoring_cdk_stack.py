@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT-0
 
 from aws_cdk import (
     aws_dynamodb as ddb,
-    aws_elasticsearch as es,
+    aws_opensearchservice as opensearch,
     aws_events as events,
     aws_events_targets as targets,
     aws_iam as iam,
@@ -20,6 +20,8 @@ import boto3
 import fileinput
 import json
 import os
+import random
+import string
 import sys
 
 # Jump host specific settings, change key name if you need an existing key to be used
@@ -27,16 +29,17 @@ EC2_KEY_NAME='aes_cdk_monitoring'
 EC2_INSTANCE_TYPE='t3.nano'
 
 # Fill this in with a valid email to receive SNS notifications.
-SNS_NOTIFICATION_EMAIL='user@example.com'
+SNS_NOTIFICATION_EMAIL='prashagr@amazon.com'
 
 # Lambda Interval Settings (seconds)
 LAMBDA_INTERVAL=300
 
-# Elasticsearch and Kibana specific constants 
-DOMAIN_NAME = 'aes-cdk-monitoring'
-DOMAIN_ADMIN_UNAME='admin'
-DOMAIN_ADMIN_PW='Kibana123!'
-DOMAIN_DATA_NODE_INSTANCE_TYPE='t3.medium.elasticsearch'
+# OpenSearch and Dashboards specific constants 
+DOMAIN_NAME = 'amazon-opensearch-monitor'
+DOMAIN_ADMIN_UNAME='opensearch'
+DOMAIN_ADMIN_PW=''.join(random.choice(string.ascii_letters + string.digits) for i in range(11)) + "!"
+print("password is", DOMAIN_ADMIN_PW)
+DOMAIN_DATA_NODE_INSTANCE_TYPE='m6g.large.search'
 DOMAIN_DATA_NODE_INSTANCE_COUNT=2
 DOMAIN_INSTANCE_VOLUME_SIZE=100
 DOMAIN_AZ_COUNT=2
@@ -52,12 +55,12 @@ for line in fileinput.input("monitoring_cdk/postCDK.py", inplace=True):
 
 ## By default monitoring stack will be setup without dedicated master node, to have dedicated master node in stack do change the number of nodes and type (if needed)
 ## Maximum Master Instance count supported by service is 5, so either have 3 or 5 dedicated node for master
-DOMAIN_MASTER_NODE_INSTANCE_TYPE='t3.medium.elasticsearch'
+DOMAIN_MASTER_NODE_INSTANCE_TYPE='c6g.large.search'
 DOMAIN_MASTER_NODE_INSTANCE_COUNT=0
 
 ## To enable UW, please make master node count as 3 or 5, and UW node count as minimum 2
 ## Also change data node to be non T2/T3 as UW does not support T2/T3 as data nodes
-DOMAIN_UW_NODE_INSTANCE_TYPE='ultrawarm1.medium.elasticsearch'
+DOMAIN_UW_NODE_INSTANCE_TYPE='ultrawarm1.medium.search'
 DOMAIN_UW_NODE_INSTANCE_COUNT=0
 
 # DDB settings
@@ -71,46 +74,89 @@ class MonitoringCdkStack(core.Stack):
         # VPC
         vpc = ec2.Vpc(self, "Monitoring VPC", max_azs=3)
 
+
         ################################################################################
         # Amazon ES domain
         # TODO: Add a template and ISM to the domain
-        es_sec_grp = ec2.SecurityGroup(self, 'ESSecGrpMonitoring', 
+        es_sec_grp = ec2.SecurityGroup(self, 'OpenSearchSecGrpMonitoring', 
                                         vpc=vpc,
                                         allow_all_outbound=True,
-                                        security_group_name='ESSecGrpMonitoring')
+                                        security_group_name='OpenSearchSecGrpMonitoring')
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
 
-        domain = es.Domain(self, 'cdk-monitoring-domain', 
-                    version=es.ElasticsearchVersion.of('7.10'), # Upgrade when CDK upgrades
-                    domain_name=DOMAIN_NAME,
-                    capacity=es.CapacityConfig(data_node_instance_type=DOMAIN_DATA_NODE_INSTANCE_TYPE,
-                                                data_nodes=DOMAIN_DATA_NODE_INSTANCE_COUNT,
-                                                master_node_instance_type=DOMAIN_MASTER_NODE_INSTANCE_TYPE,
-                                                master_nodes=DOMAIN_MASTER_NODE_INSTANCE_COUNT,
-                                                warm_instance_type=DOMAIN_UW_NODE_INSTANCE_TYPE,
-                                                warm_nodes=DOMAIN_UW_NODE_INSTANCE_COUNT
-                                            ),
-                    ebs=es.EbsOptions(enabled=True,
-                                        volume_size=DOMAIN_INSTANCE_VOLUME_SIZE,
-                                        volume_type=ec2.EbsDeviceVolumeType.GP2),
-                    vpc_options=es.VpcOptions(
-                        security_groups=[es_sec_grp],
-                        subnets=vpc.public_subnets,
-                    ),
-                    zone_awareness=es.ZoneAwarenessConfig(enabled=True,
-                                                          availability_zone_count=DOMAIN_AZ_COUNT),
-                    enforce_https=True,
-                    node_to_node_encryption=True,
-                    encryption_at_rest={
-                        "enabled": True
-                    },
-                    use_unsigned_basic_auth=True,
-                    fine_grained_access_control={
-                        "master_user_name": DOMAIN_ADMIN_UNAME,
-                        "master_user_password": core.SecretValue.plain_text(DOMAIN_ADMIN_PW)
-                    },
-                 )
+        # prod_domain = es.Domain(self, "Domain",
+        #     version=es.EngineVersion.OPENSEARCH_1_0,
+        #     domain_name=DOMAIN_NAME,
+        #     capacity={
+        #         "data_node_instance_type": DOMAIN_DATA_NODE_INSTANCE_TYPE,
+        #         "data_nodes": DOMAIN_DATA_NODE_INSTANCE_COUNT,
+        #         "master_node_instance_type": DOMAIN_MASTER_NODE_INSTANCE_TYPE,
+        #         "master_nodes": DOMAIN_MASTER_NODE_INSTANCE_COUNT,
+        #         "warm_instance_type": DOMAIN_UW_NODE_INSTANCE_TYPE,
+        #         "warm_nodes": DOMAIN_UW_NODE_INSTANCE_COUNT                
+        #     },
+        #     ebs={
+        #         "volume_size": DOMAIN_INSTANCE_VOLUME_SIZE,
+        #         "volume_type": ec2.EbsDeviceVolumeType.GP2
+        #     },
+        #     zone_awareness={
+        #         "availability_zone_count": DOMAIN_AZ_COUNT
+        #     },
+        #     enforce_https=True,
+        #     node_to_node_encryption=True,
+        #     encryption_at_rest={
+        #         "enabled": True
+        #     },
+        #     use_unsigned_basic_auth=True,
+        #     fine_grained_access_control={
+        #         "master_user_name": DOMAIN_ADMIN_UNAME,
+        #         "master_user_password": core.SecretValue.plain_text(DOMAIN_ADMIN_PW)
+        #     },
+        #     vpc_subnets=vpc.public_subnets,
+        #     security_groups=[es_sec_grp]
+        # )
+
+        domain = opensearch.Domain(self, 'cdk-monitoring-domain', 
+            version=opensearch.EngineVersion.OPENSEARCH_1_0, # Upgrade when CDK upgrades
+            domain_name=DOMAIN_NAME,
+            removal_policy=core.RemovalPolicy.DESTROY,
+            capacity=opensearch.CapacityConfig(
+                data_node_instance_type=DOMAIN_DATA_NODE_INSTANCE_TYPE,
+                data_nodes=DOMAIN_DATA_NODE_INSTANCE_COUNT,
+                master_node_instance_type=DOMAIN_MASTER_NODE_INSTANCE_TYPE,
+                master_nodes=DOMAIN_MASTER_NODE_INSTANCE_COUNT,
+                warm_instance_type=DOMAIN_UW_NODE_INSTANCE_TYPE,
+                warm_nodes=DOMAIN_UW_NODE_INSTANCE_COUNT
+            ),
+            ebs=opensearch.EbsOptions(
+                enabled=True,
+                volume_size=DOMAIN_INSTANCE_VOLUME_SIZE,
+                volume_type=ec2.EbsDeviceVolumeType.GP2
+            ),
+            # vpc_options=es.VpcOptions(
+            #     security_groups=[es_sec_grp],
+            #     subnets=vpc.public_subnets,
+            # ),
+            # vpc_subnets={ 'subnet_type': ec2.SubnetType.PUBLIC },
+            vpc=vpc,
+            vpc_subnets=[ec2.SubnetType.PUBLIC],
+            security_groups=[es_sec_grp],
+            zone_awareness=opensearch.ZoneAwarenessConfig(
+                enabled=True,
+                availability_zone_count=DOMAIN_AZ_COUNT
+            ),
+            enforce_https=True,
+            node_to_node_encryption=True,
+            encryption_at_rest={
+                "enabled": True
+            },
+            use_unsigned_basic_auth=True,
+            fine_grained_access_control={
+                "master_user_name": DOMAIN_ADMIN_UNAME,
+                "master_user_password": core.SecretValue.plain_text(DOMAIN_ADMIN_PW)
+            }
+        )
 
         core.CfnOutput(self, "MasterPW",
                         value=DOMAIN_ADMIN_PW,
@@ -171,22 +217,22 @@ class MonitoringCdkStack(core.Stack):
         ################################################################################
         # Lambda for CW Logs
         lambda_func_cw_logs = lambda_.Function(
-            self, 'LogsToElasticsearch',
-            function_name="LogsToElasticsearch_aes-cdk-monitoring",
+            self, 'LogsToOpenSearch',
+            function_name="LogsToOpenSearch_aes-cdk-monitoring",
             runtime = lambda_.Runtime.NODEJS_12_X,
-            code=lambda_.Code.asset('LogsToElasticsearch'),
+            code=lambda_.Code.asset('LogsToOpenSearch'),
             handler='index.handler',
             vpc=vpc
         )
 
-        # Load Amazon ES Domain to env variable
+        # # Load Amazon ES Domain to env variable
         lambda_func_cw_logs.add_environment('DOMAIN_ENDPOINT', domain.domain_endpoint)
 
-        # When the domain is created here, restrict access
+        # # When the domain is created here, restrict access
         lambda_func_cw_logs.add_to_role_policy(iam.PolicyStatement(actions=['es:*'],
             resources=['*']))
 
-        # The function needs to read CW Logs. Restrict
+        # # The function needs to read CW Logs. Restrict
         lambda_func_cw_logs.add_to_role_policy(iam.PolicyStatement(actions=['logs:*'],
             resources=['*']))
 
@@ -250,14 +296,14 @@ class MonitoringCdkStack(core.Stack):
         sns_role.add_managed_policy(sns_policy)
 
         dirname = os.path.dirname(__file__)
-        kibana_asset = Asset(self, "KibanaAsset", path=os.path.join(dirname, 'export_kibana_dashboards_V7_10.ndjson'))
-        kibana_asset.grant_read(instance.role)
-        kibana_asset_path = instance.user_data.add_s3_download_command(
-            bucket=kibana_asset.bucket,
-            bucket_key=kibana_asset.s3_object_key,
+        dashboards_asset = Asset(self, "DashboardsAsset", path=os.path.join(dirname, 'export_opensearch_dashboards_V1_0.ndjson'))
+        dashboards_asset.grant_read(instance.role)
+        dashboards_asset_path = instance.user_data.add_s3_download_command(
+            bucket=dashboards_asset.bucket,
+            bucket_key=dashboards_asset.s3_object_key,
         )
 
-        nginx_asset = Asset(self, "NginxAsset", path=os.path.join(dirname, 'nginx_kibana.conf'))
+        nginx_asset = Asset(self, "NginxAsset", path=os.path.join(dirname, 'nginx_opensearch.conf'))
         nginx_asset.grant_read(instance.role)
         nginx_asset_path = instance.user_data.add_s3_download_command(
             bucket=nginx_asset.bucket,
@@ -277,14 +323,14 @@ class MonitoringCdkStack(core.Stack):
             "yum install jq -y",
             "amazon-linux-extras install nginx1.12",
             "cd /tmp/assets",
-            "mv {} export_kibana_dashboards_V7_10.ndjson".format(kibana_asset_path),
-            "mv {} nginx_kibana.conf".format(nginx_asset_path),
+            "mv {} export_opensearch_dashboards_V1_0.ndjson".format(dashboards_asset_path),
+            "mv {} nginx_opensearch.conf".format(nginx_asset_path),
             "mv {} create_alerts.sh".format(alerting_asset_path),
 
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
-            "cp nginx_kibana.conf /etc/nginx/conf.d/",
-            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /tmp/assets/export_kibana_dashboards_V7_10.ndjson",
-            "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /etc/nginx/conf.d/nginx_kibana.conf",
+            "cp nginx_opensearch.conf /etc/nginx/conf.d/",
+            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /tmp/assets/export_opensearch_dashboards_V1_0.ndjson",
+            "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /etc/nginx/conf.d/nginx_opensearch.conf",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /tmp/assets/create_alerts.sh",
             "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_cw_logs.role.role_arn + "=g' /tmp/assets/create_alerts.sh",
             "sed -i 's=SNS_ROLE_ARN=" + sns_role.role_arn + "=g' /tmp/assets/create_alerts.sh",
@@ -298,9 +344,9 @@ class MonitoringCdkStack(core.Stack):
             "bash --verbose create_alerts.sh",
         )
 
-        core.CfnOutput(self, "Kibana URL (via Jump host)",
+        core.CfnOutput(self, "Dashboards URL (via Jump host)",
                         value="https://" + instance.instance_public_ip,
-                        description="Kibana URL via Jump host")
+                        description="Dashboards URL via Jump host")
 
         core.CfnOutput(self, "SNS Subscription Alert Message",
                         value=SNS_NOTIFICATION_EMAIL,

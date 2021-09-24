@@ -40,7 +40,7 @@ if (sys.argv[1].lower() == "deploy"):
                 logGroupName=log_group["logGroupName"],
                 filterName=subscriptionFilterNamePrefix + log_group["logGroupName"] + "-" + region,
                 filterPattern=' ',
-                destinationArn='arn:aws:lambda:' + current_region + ':' + account_id + ':function:LogsToElasticsearch_aes-cdk-monitoring'
+                destinationArn='arn:aws:lambda:' + current_region + ':' + account_id + ':function:LogsToOpenSearch_aes-cdk-monitoring'
             )
 elif (sys.argv[1].lower() == "destroy"):
     # Delete subscription filter from all CW Logs across regions
