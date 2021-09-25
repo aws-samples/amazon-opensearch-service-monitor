@@ -7,7 +7,7 @@ source .env/bin/activate
 # download requirements
 .env/bin/python -m pip install -r requirements.txt --use-deprecated=legacy-resolver
 # Load dependency for lambda functions
-.env/bin/python -m pip install --target monitoring-py/ -r monitoring-py/requirements.txt
+.env/bin/python -m pip install --target CWMetricsToOpenSearch/ -r CWMetricsToOpenSearch/requirements.txt
 
 # create the key pair
 region_default="us-west-2"
@@ -30,5 +30,5 @@ email_default="user@example.com"
 echo -e
 read -p "Please enter an e-mail for alert [$email_default]: " email
 email="${email:-$email_default}"
-sed -i -e 's/user@example.com/'$email'/g' monitoring_cdk/monitoring_cdk_stack.py
+sed -i -e 's/user@example.com/'$email'/g' opensearch/opensearch_monitor_stack.py
 

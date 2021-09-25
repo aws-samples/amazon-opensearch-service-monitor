@@ -10,7 +10,7 @@ with open("README.md") as fp:
 
 
 setuptools.setup(
-    name="monitoring_cdk",
+    name="opensearch",
     version="0.0.1",
 
     description="An empty CDK Python app",
@@ -19,8 +19,8 @@ setuptools.setup(
 
     author="author",
 
-    package_dir={"": "monitoring_cdk"},
-    packages=setuptools.find_packages(where="monitoring_cdk"),
+    package_dir={"": "opensearch"},
+    packages=setuptools.find_packages(where="opensearch"),
 
     install_requires=[
         "aws-cdk.core==1.82.0",

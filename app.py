@@ -7,10 +7,10 @@ SPDX-License-Identifier: MIT-0
 
 from aws_cdk import core
 
-from monitoring_cdk.monitoring_cdk_stack import MonitoringCdkStack
+from opensearch.opensearch_monitor_stack import OpenSearchMonitor
 
 
 app = core.App()
-MonitoringCdkStack(app, "monitoring-cdk")
+OpenSearchMonitor(app, "opensearch-monitor-stack")
 
 app.synth()

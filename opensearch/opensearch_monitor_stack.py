@@ -37,8 +37,7 @@ LAMBDA_INTERVAL=300
 # OpenSearch and Dashboards specific constants 
 DOMAIN_NAME = 'amazon-opensearch-monitor'
 DOMAIN_ADMIN_UNAME='opensearch'
-DOMAIN_ADMIN_PW=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(15)) + "!"
-print ("Amazon OpenSearch Service password:", DOMAIN_ADMIN_PW)
+DOMAIN_ADMIN_PW=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(13)) + random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase) + random.choice(string.digits) + "!" 
 DOMAIN_DATA_NODE_INSTANCE_TYPE='m6g.large.search'
 DOMAIN_DATA_NODE_INSTANCE_COUNT=2
 DOMAIN_INSTANCE_VOLUME_SIZE=100
@@ -47,8 +46,8 @@ DOMAIN_AZ_COUNT=2
 # Excluded regions ap-east-1, af-south-1, eu-south-1, and the me-south-1 as they are not enabled by default, change this if those are enabled in your account
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
 REGIONS_TO_MONITOR='["us-east-1", "us-east-2", "us-west-1", "us-west-2", "ap-south-1", "ap-northeast-1", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1", "eu-central-1", "eu-west-1", "eu-west-2", "eu-west-3", "eu-north-1", "sa-east-1"]'
-# Set REGIONS_TO_MONITOR in postCDK.py
-for line in fileinput.input("monitoring_cdk/postCDK.py", inplace=True):
+# Set REGIONS_TO_MONITOR in setupCWSubscriptionFilter.py
+for line in fileinput.input("opensearch/setupCWSubscriptionFilter.py", inplace=True):
     if line.strip().startswith('REGIONS_TO_MONITOR='):
         line = 'REGIONS_TO_MONITOR=\''+REGIONS_TO_MONITOR+'\'\n'
     sys.stdout.write(line)
@@ -66,7 +65,7 @@ DOMAIN_UW_NODE_INSTANCE_COUNT=0
 # DDB settings
 TABLE_NAME = 'timestamps'
 
-class MonitoringCdkStack(core.Stack):
+class OpenSearchMonitor(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -84,7 +83,7 @@ class MonitoringCdkStack(core.Stack):
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
 
-        domain = opensearch.Domain(self, 'cdk-monitoring-domain', 
+        domain = opensearch.Domain(self, 'opensearch-service-monitor', 
             version=opensearch.EngineVersion.OPENSEARCH_1_0, # Upgrade when CDK upgrades
             domain_name=DOMAIN_NAME,
             removal_policy=core.RemovalPolicy.DESTROY,
@@ -130,7 +129,7 @@ class MonitoringCdkStack(core.Stack):
 
         ################################################################################
         # Dynamo DB table for time stamp tracking
-        table = ddb.Table(self, 'monitoring-lambda-timestamp',
+        table = ddb.Table(self, 'opensearch-monitor-lambda-timestamp',
                           table_name=TABLE_NAME,
                           partition_key=ddb.Attribute(
                                 name="domain",
@@ -146,9 +145,10 @@ class MonitoringCdkStack(core.Stack):
         ################################################################################
         # Lambda monitoring function
         lambda_func = lambda_.Function(
-            self, 'handler',
+            self, 'CWMetricsToOpenSearch',
+            function_name="CWMetricsToOpenSearch_monitoring",
             runtime = lambda_.Runtime.PYTHON_3_8,
-            code=lambda_.Code.asset('monitoring-py'),
+            code=lambda_.Code.asset('CWMetricsToOpenSearch'),
             handler='handler.handler',
             memory_size=1024,
             timeout=core.Duration.minutes(10),
@@ -183,10 +183,10 @@ class MonitoringCdkStack(core.Stack):
         ################################################################################
         # Lambda for CW Logs
         lambda_func_cw_logs = lambda_.Function(
-            self, 'LogsToOpenSearch',
-            function_name="LogsToOpenSearch_monitoring",
+            self, 'CWLogsToOpenSearch',
+            function_name="CWLogsToOpenSearch_monitoring",
             runtime = lambda_.Runtime.NODEJS_12_X,
-            code=lambda_.Code.asset('LogsToOpenSearch'),
+            code=lambda_.Code.asset('CWLogsToOpenSearch'),
             handler='index.handler',
             vpc=vpc
         )
