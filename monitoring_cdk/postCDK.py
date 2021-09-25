@@ -18,10 +18,12 @@ current_region = session.region_name
 account_id = boto3.client("sts").get_caller_identity()["Account"]
 # Prefix to define CW Log group which need to be traversed and create/delete subscription filter for same
 logGroupNamePrefix='/aws/aes/domains'
-subscriptionFilterNamePrefix='AmazonES-CWLogs-filter-'
+logGroupNamePrefixOpensearch='/aws/OpenSearchService/domains'
+subscriptionFilterNamePrefix='OpenSearch-CWLogs-filter-'
 
 if (sys.argv[1].lower() == "deploy"):
-    # Create subscription filter for all CW Logs across regions
+    # Create subscription filter for all CW Logs across regions for Amazon Elasticsearch Service 
+    # Can be removed in future major version when Amazon ES is deprecated
     for region in json.loads(REGIONS_TO_MONITOR):
         print("Starting to create CW Log filters for", region)
         # Create CW Logs client
@@ -40,10 +42,33 @@ if (sys.argv[1].lower() == "deploy"):
                 logGroupName=log_group["logGroupName"],
                 filterName=subscriptionFilterNamePrefix + log_group["logGroupName"] + "-" + region,
                 filterPattern=' ',
-                destinationArn='arn:aws:lambda:' + current_region + ':' + account_id + ':function:LogsToOpenSearch_aes-cdk-monitoring'
+                destinationArn='arn:aws:lambda:' + current_region + ':' + account_id + ':function:LogsToOpenSearch_monitoring'
             )
+
+    # Create subscription filter for all CW Logs across regions for Amazon OpenSearch Service 
+    for region in json.loads(REGIONS_TO_MONITOR):
+        print("Starting to create CW Log filters for", region)
+        # Create CW Logs client
+        cw_logs_client = boto3.client('logs', region_name=region)
+        response = cw_logs_client.describe_log_groups(
+            logGroupNamePrefix=logGroupNamePrefixOpensearch
+        )
+        # Read response which is dict, and change that to json with quotes "
+        json_response = json.dumps(response)
+
+        # Parse JSON data to extract logGroups
+        log_groups = json.loads(json_response)["logGroups"]
+        for log_group in log_groups:
+            print("Processing logGroups:", log_group["arn"])
+            cw_logs_client.put_subscription_filter(
+                logGroupName=log_group["logGroupName"],
+                filterName=subscriptionFilterNamePrefix + log_group["logGroupName"] + "-" + region,
+                filterPattern=' ',
+                destinationArn='arn:aws:lambda:' + current_region + ':' + account_id + ':function:LogsToOpenSearch_monitoring'
+            )
+
 elif (sys.argv[1].lower() == "destroy"):
-    # Delete subscription filter from all CW Logs across regions
+    # Delete subscription filter from all CW Logs across regions for Amazon Elasticsearch Service
     for region in json.loads(REGIONS_TO_MONITOR):
         print("Starting to delete CW Log filters for", region)
         # Create CW Logs client
@@ -74,5 +99,37 @@ elif (sys.argv[1].lower() == "destroy"):
                     logGroupName=log_group["logGroupName"],
                     filterName=filter["filterName"]
                 )
+    # Delete subscription filter from all CW Logs across regions for Amazon OpenSearch Service
+    for region in json.loads(REGIONS_TO_MONITOR):
+        print("Starting to delete CW Log filters for", region)
+        # Create CW Logs client
+        cw_logs_client = boto3.client('logs', region_name=region)
+        response = cw_logs_client.describe_log_groups(
+            logGroupNamePrefix=logGroupNamePrefixOpensearch
+        )
+        # Read response which is dict, and change that to json with "
+        json_response = json.dumps(response)
+
+        # Parse JSON data to extract logGroups
+        log_groups = json.loads(json_response)["logGroups"]
+        # Traverse each log group to list cw logs filter and delete the one starting with 'subscriptionFilterNamePrefix'
+        for log_group in log_groups:
+            print("Processing logGroups:", log_group["arn"])
+            filter_response = cw_logs_client.describe_subscription_filters(
+                logGroupName=log_group["logGroupName"],
+                filterNamePrefix=subscriptionFilterNamePrefix
+            )
+            # Read response which is dict, and change that to json with quotes "
+            filter_json_response = json.dumps(filter_response)
+            subscription_filters = json.loads(filter_json_response)["subscriptionFilters"]
+
+            # Iterate subscriptionFilter to delete
+            for filter in subscription_filters:
+                print("Deleting subscriptionFilter:", filter["filterName"])
+                cw_logs_client.delete_subscription_filter(
+                    logGroupName=log_group["logGroupName"],
+                    filterName=filter["filterName"]
+                )
+
 else:
     sys.exit("Unrecognised argument '" + sys.argv[1].lower() + "', please run as python3 postCDK.py deploy|destroy ")

@@ -25,11 +25,11 @@ import string
 import sys
 
 # Jump host specific settings, change key name if you need an existing key to be used
-EC2_KEY_NAME='aes_cdk_monitoring'
+EC2_KEY_NAME='amazon_opensearch_monitoring'
 EC2_INSTANCE_TYPE='t3.nano'
 
 # Fill this in with a valid email to receive SNS notifications.
-SNS_NOTIFICATION_EMAIL='prashagr@amazon.com'
+SNS_NOTIFICATION_EMAIL='user@example.com'
 
 # Lambda Interval Settings (seconds)
 LAMBDA_INTERVAL=300
@@ -37,8 +37,8 @@ LAMBDA_INTERVAL=300
 # OpenSearch and Dashboards specific constants 
 DOMAIN_NAME = 'amazon-opensearch-monitor'
 DOMAIN_ADMIN_UNAME='opensearch'
-DOMAIN_ADMIN_PW=''.join(random.choice(string.ascii_letters + string.digits) for i in range(11)) + "!"
-print("password is", DOMAIN_ADMIN_PW)
+DOMAIN_ADMIN_PW=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(15)) + "!"
+print ("Amazon OpenSearch Service password:", DOMAIN_ADMIN_PW)
 DOMAIN_DATA_NODE_INSTANCE_TYPE='m6g.large.search'
 DOMAIN_DATA_NODE_INSTANCE_COUNT=2
 DOMAIN_INSTANCE_VOLUME_SIZE=100
@@ -76,46 +76,13 @@ class MonitoringCdkStack(core.Stack):
 
 
         ################################################################################
-        # Amazon ES domain
-        # TODO: Add a template and ISM to the domain
+        # Amazon OpenSearch Service domain
         es_sec_grp = ec2.SecurityGroup(self, 'OpenSearchSecGrpMonitoring', 
                                         vpc=vpc,
                                         allow_all_outbound=True,
                                         security_group_name='OpenSearchSecGrpMonitoring')
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
-
-        # prod_domain = es.Domain(self, "Domain",
-        #     version=es.EngineVersion.OPENSEARCH_1_0,
-        #     domain_name=DOMAIN_NAME,
-        #     capacity={
-        #         "data_node_instance_type": DOMAIN_DATA_NODE_INSTANCE_TYPE,
-        #         "data_nodes": DOMAIN_DATA_NODE_INSTANCE_COUNT,
-        #         "master_node_instance_type": DOMAIN_MASTER_NODE_INSTANCE_TYPE,
-        #         "master_nodes": DOMAIN_MASTER_NODE_INSTANCE_COUNT,
-        #         "warm_instance_type": DOMAIN_UW_NODE_INSTANCE_TYPE,
-        #         "warm_nodes": DOMAIN_UW_NODE_INSTANCE_COUNT                
-        #     },
-        #     ebs={
-        #         "volume_size": DOMAIN_INSTANCE_VOLUME_SIZE,
-        #         "volume_type": ec2.EbsDeviceVolumeType.GP2
-        #     },
-        #     zone_awareness={
-        #         "availability_zone_count": DOMAIN_AZ_COUNT
-        #     },
-        #     enforce_https=True,
-        #     node_to_node_encryption=True,
-        #     encryption_at_rest={
-        #         "enabled": True
-        #     },
-        #     use_unsigned_basic_auth=True,
-        #     fine_grained_access_control={
-        #         "master_user_name": DOMAIN_ADMIN_UNAME,
-        #         "master_user_password": core.SecretValue.plain_text(DOMAIN_ADMIN_PW)
-        #     },
-        #     vpc_subnets=vpc.public_subnets,
-        #     security_groups=[es_sec_grp]
-        # )
 
         domain = opensearch.Domain(self, 'cdk-monitoring-domain', 
             version=opensearch.EngineVersion.OPENSEARCH_1_0, # Upgrade when CDK upgrades
@@ -134,11 +101,6 @@ class MonitoringCdkStack(core.Stack):
                 volume_size=DOMAIN_INSTANCE_VOLUME_SIZE,
                 volume_type=ec2.EbsDeviceVolumeType.GP2
             ),
-            # vpc_options=es.VpcOptions(
-            #     security_groups=[es_sec_grp],
-            #     subnets=vpc.public_subnets,
-            # ),
-            # vpc_subnets={ 'subnet_type': ec2.SubnetType.PUBLIC },
             vpc=vpc,
             vpc_subnets=[ec2.SubnetType.PUBLIC],
             security_groups=[es_sec_grp],
@@ -158,9 +120,13 @@ class MonitoringCdkStack(core.Stack):
             }
         )
 
+        core.CfnOutput(self, "MasterUser",
+                        value=DOMAIN_ADMIN_UNAME,
+                        description="Master User Name for Amazon OpenSearch Service")
+
         core.CfnOutput(self, "MasterPW",
                         value=DOMAIN_ADMIN_PW,
-                        description="Master User Password for Amazon ES domain")
+                        description="Master User Password for Amazon OpenSearch Service")
 
         ################################################################################
         # Dynamo DB table for time stamp tracking
@@ -218,14 +184,14 @@ class MonitoringCdkStack(core.Stack):
         # Lambda for CW Logs
         lambda_func_cw_logs = lambda_.Function(
             self, 'LogsToOpenSearch',
-            function_name="LogsToOpenSearch_aes-cdk-monitoring",
+            function_name="LogsToOpenSearch_monitoring",
             runtime = lambda_.Runtime.NODEJS_12_X,
             code=lambda_.Code.asset('LogsToOpenSearch'),
             handler='index.handler',
             vpc=vpc
         )
 
-        # # Load Amazon ES Domain to env variable
+        # # Load Amazon OpenSearch Service Domain to env variable
         lambda_func_cw_logs.add_environment('DOMAIN_ENDPOINT', domain.domain_endpoint)
 
         # # When the domain is created here, restrict access

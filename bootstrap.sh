@@ -15,15 +15,15 @@ echo -e
 read -p "Please enter your region to bootstrap the env [$region_default]: " region
 region="${region:-$region_default}"
 
-aws ec2 create-key-pair --key-name aes_cdk_monitoring --query 'KeyMaterial' --output text > aes_cdk_monitoring.pem --region $region
+aws ec2 create-key-pair --key-name amazon_opensearch_monitoring --query 'KeyMaterial' --output text > amazon_opensearch_monitoring.pem --region $region
 # update key_pair permissions
-chmod 400 aes_cdk_monitoring.pem
+chmod 400 amazon_opensearch_monitoring.pem
 # move key_pair to .ssh
-mv -f aes_cdk_monitoring.pem $HOME/.ssh/aes_cdk_monitoring.pem
+mv -f amazon_opensearch_monitoring.pem $HOME/.ssh/amazon_opensearch_monitoring.pem
 # start the ssh agent
 eval `ssh-agent -s`
 # add your key to keychain
-ssh-add -k ~/.ssh/aes_cdk_monitoring.pem 
+ssh-add -k ~/.ssh/amazon_opensearch_monitoring.pem 
 
 # Add e-mail for the notification
 email_default="user@example.com"
