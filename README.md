@@ -18,7 +18,7 @@ Amazon OpenSearch Service is a fully managed service that makes it easy for you 
 This example helps you to configure a monitoring for Amazon OpenSearch Service domains, which will fetch the Cloudwatch Metrics and Cloudwatch logs from all domains at a regular interval. This example also comes with pre-built OpenSearch dashboards and Alerts. 
 
 ## Architecture
-![architecture](/images/Amazon_OpenSearch_Service_Monitoring_Framework.png)
+![architecture](/images/amazon_opensearch_service_monitor_framework.png)
 
 -----
 
