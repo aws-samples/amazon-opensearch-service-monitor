@@ -116,7 +116,7 @@ The CDK will prompt to apply Security Changes, input "y" for Yes.
   1. Login to Dashboards: Access OpenSearch Dashboards with an IP obtained after the deployment and login as below
       ![Dashboards login screen](/images/opensearch_dashboards_login.png)
 
-  2. Once logged in, select dashboard as shown below
+  2. Once logged in, select the private tenant from the pop up and then select dashboard as shown below
       ![OpenSearch Dashboards](/images/opensearch_dashboards_select.png)
 
   3. After clicking on dashboard, it displays list of the dashboard which comes as default
