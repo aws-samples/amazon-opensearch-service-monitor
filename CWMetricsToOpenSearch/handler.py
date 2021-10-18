@@ -47,12 +47,11 @@ DOMAIN_ADMIN_UNAME = os.environ['DOMAIN_ADMIN_UNAME']
 DOMAIN_ADMIN_PW = os.environ['DOMAIN_ADMIN_PW']
 REGIONS = json.loads(os.environ['REGIONS'])
 
-
 ################################################################################
 # Timestamp tracking
 
 def get_last_timestamp_ddb(domain_name, region):
-    ddb = boto3.client('dynamodb', 'us-west-2')
+    ddb = boto3.client('dynamodb')
     try:
         ret = ddb.get_item(TableName=DDB_TABLE,
                             Key={'domain': {'S': domain_name},
@@ -65,13 +64,13 @@ def get_last_timestamp_ddb(domain_name, region):
         iso_ts = iso_ts['S']
         return parser.parse(iso_ts)
     except Exception as e:
-        print('Exception retrieving timestap for "{}:{}"'.format(domain_name, region))
+        print('Exception retrieving timestamp for "{}:{}"'.format(domain_name, region))
         print(e)
     return None
 
 
 def update_metric_timestamp_ddb(domain_name, region, ts):
-    ddb = boto3.client('dynamodb', 'us-west-2')
+    ddb = boto3.client('dynamodb')
     try:
         existing = get_last_timestamp_ddb(domain_name, region)
         if not existing or (existing and existing < ts):
@@ -82,7 +81,7 @@ def update_metric_timestamp_ddb(domain_name, region, ts):
                 AttributeUpdates={'Timestamp': { 'Value': {'S': ts.isoformat()}}}
             )
     except Exception as e:
-        print('Exception putting timestap for "{}:{}"'.format(domain_name, region))
+        print('Exception putting timestamp for "{}:{}"'.format(domain_name, region))
         print(e)
 
 
@@ -104,7 +103,6 @@ def get_last_timestamp(domain_name, region):
 
 ################################################################################
 # Domain tracking; 
-# REGIONS = ['us-east-1'] #, 'us-west-2'] # , 'us-east-2', 'us-west-1', 'us-west-2']
 
 def list_all_domains():
     ''' Loops through the list of REGIONS, listing out all domains for this
@@ -255,14 +253,13 @@ def get_all_domain_metric_values(domains):
 
 
 ################################################################################
-# Amazon ES interface
+# Amazon OpenSearch interface
 
 INDEX_DESCRIPTOR = IndexDescriptor(es_index='domains', es_v7=True, timestamped=True)
 ES_AUTH = es_sink.es_auth.ESHttpAuth(DOMAIN_ADMIN_UNAME, DOMAIN_ADMIN_PW)
 ES_DESCRIPTOR = ESDescriptor(
     endpoint=DOMAIN_ENDPOINT,
     index_descriptor=INDEX_DESCRIPTOR,
-    region='us-west-2', 
     auth=ES_AUTH
 )
 ES_BUFFER = es_sink.flushing_buffer.flushing_buffer_factory(ES_DESCRIPTOR,

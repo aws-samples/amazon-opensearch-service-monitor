@@ -8,7 +8,7 @@ var crypto = require('crypto');
 var endpoint = process.env.DOMAIN_ENDPOINT;
 
 // Set this to true if you want to debug why data isn't making it to
-// your Elasticsearch cluster. This will enable logging of failed items
+// your Opensearch cluster. This will enable logging of failed items
 // to CloudWatch Logs.
 var logFailedResponses = false;
 
@@ -23,18 +23,18 @@ exports.handler = function(input, context) {
         // parse the input from JSON
         var awslogsData = JSON.parse(buffer.toString('utf8'));
         
-        // transform the input to Elasticsearch documents
-        var elasticsearchBulkData = transform(awslogsData);
+        // transform the input to Opensearch documents
+        var opensearchBulkData = transform(awslogsData);
 
         // skip control messages
-        if (!elasticsearchBulkData) {
+        if (!opensearchBulkData) {
             console.log('Received a control message');
             context.succeed('Control message handled successfully');
             return;
         }
 
-        // post documents to the Amazon Elasticsearch Service
-        post(elasticsearchBulkData, function(error, success, statusCode, failedItems) {
+        // post documents to the Amazon Opensearch Service
+        post(opensearchBulkData, function(error, success, statusCode, failedItems) {
             console.log('Response: ' + JSON.stringify({
                 "statusCode": statusCode
             }));
