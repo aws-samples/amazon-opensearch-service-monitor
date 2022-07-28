@@ -9,7 +9,7 @@ sleep 10;
 # There was a bug in elastic which can't store the origin url when string field is converted to URL type and it is exported to another domain. Workaround is to replace it manually.
 # https://github.com/elastic/kibana/issues/63924
 InstanceIP=`curl ifconfig.me`
-sed -i 's/CHANGE_ORIGIN_URL/'$InstanceIP'/g' /tmp/assets/export_opensearch_dashboards_V1_0.ndjson
+sed -i 's/CHANGE_ORIGIN_URL/'$InstanceIP'/g' /home/ec2-user/assets/export_opensearch_dashboards_V1_0.ndjson
 
 # Create backend role to load CW logs using lambda
 curl -s -XPATCH -u DOMAIN_ADMIN_UNAME:DOMAIN_ADMIN_PW 'https://DOMAIN_ENDPOINT/_opendistro/_security/api/rolesmapping/all_access' -H 'Content-Type: application/json' -d '[ {"op":"add","path":"/backend_roles","value":["LAMBDA_CW_LOGS_ROLE_ARN"]} ] '

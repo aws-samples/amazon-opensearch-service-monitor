@@ -12,10 +12,11 @@ from aws_cdk import (
     aws_lambda as lambda_,
     aws_ec2 as ec2,
     aws_sns as sns,
-    aws_sns_subscriptions as subscriptions,    
-    core
+    aws_sns_subscriptions as subscriptions,
+    Aws, CfnOutput, Stack, RemovalPolicy, SecretValue, Duration
 )
 from aws_cdk.aws_s3_assets import Asset
+from constructs import Construct
 import boto3
 import fileinput
 import json
@@ -65,8 +66,8 @@ DOMAIN_UW_NODE_INSTANCE_COUNT=0
 # DDB settings
 TABLE_NAME = 'timestamps'
 
-class OpenSearchMonitor(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class OpenSearchMonitor(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         ################################################################################
@@ -84,9 +85,9 @@ class OpenSearchMonitor(core.Stack):
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
 
         domain = opensearch.Domain(self, 'opensearch-service-monitor', 
-            version=opensearch.EngineVersion.OPENSEARCH_1_0, # Upgrade when CDK upgrades
+            version=opensearch.EngineVersion.OPENSEARCH_1_2, # Upgrade when CDK upgrades
             domain_name=DOMAIN_NAME,
-            removal_policy=core.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
             capacity=opensearch.CapacityConfig(
                 data_node_instance_type=DOMAIN_DATA_NODE_INSTANCE_TYPE,
                 data_nodes=DOMAIN_DATA_NODE_INSTANCE_COUNT,
@@ -115,15 +116,15 @@ class OpenSearchMonitor(core.Stack):
             use_unsigned_basic_auth=True,
             fine_grained_access_control={
                 "master_user_name": DOMAIN_ADMIN_UNAME,
-                "master_user_password": core.SecretValue.plain_text(DOMAIN_ADMIN_PW)
+                "master_user_password": SecretValue.unsafe_plain_text(DOMAIN_ADMIN_PW)
             }
         )
 
-        core.CfnOutput(self, "MasterUser",
+        CfnOutput(self, "MasterUser",
                         value=DOMAIN_ADMIN_UNAME,
                         description="Master User Name for Amazon OpenSearch Service")
 
-        core.CfnOutput(self, "MasterPW",
+        CfnOutput(self, "MasterPW",
                         value=DOMAIN_ADMIN_PW,
                         description="Master User Password for Amazon OpenSearch Service")
 
@@ -139,7 +140,7 @@ class OpenSearchMonitor(core.Stack):
                               name='region',
                               type=ddb.AttributeType.STRING
                           ),
-                          removal_policy=core.RemovalPolicy.DESTROY
+                          removal_policy=RemovalPolicy.DESTROY
                         )
 
         ################################################################################
@@ -148,10 +149,10 @@ class OpenSearchMonitor(core.Stack):
             self, 'CWMetricsToOpenSearch',
             function_name="CWMetricsToOpenSearch_monitoring",
             runtime = lambda_.Runtime.PYTHON_3_8,
-            code=lambda_.Code.asset('CWMetricsToOpenSearch'),
+            code=lambda_.Code.from_asset('CWMetricsToOpenSearch'),
             handler='handler.handler',
             memory_size=1024,
-            timeout=core.Duration.minutes(10),
+            timeout=Duration.minutes(10),
             vpc=vpc
         )
 
@@ -171,7 +172,7 @@ class OpenSearchMonitor(core.Stack):
         lambda_func.add_to_role_policy(iam.PolicyStatement(actions=['cloudwatch:*'],
             resources=['*']))
 
-        lambda_schedule = events.Schedule.rate(core.Duration.seconds(LAMBDA_INTERVAL))
+        lambda_schedule = events.Schedule.rate(Duration.seconds(LAMBDA_INTERVAL))
         event_lambda_target = targets.LambdaFunction(handler=lambda_func)
         events.Rule(
             self,
@@ -186,7 +187,7 @@ class OpenSearchMonitor(core.Stack):
             self, 'CWLogsToOpenSearch',
             function_name="CWLogsToOpenSearch_monitoring",
             runtime = lambda_.Runtime.NODEJS_12_X,
-            code=lambda_.Code.asset('CWLogsToOpenSearch'),
+            code=lambda_.Code.from_asset('CWLogsToOpenSearch'),
             handler='index.handler',
             vpc=vpc
         )
@@ -288,21 +289,22 @@ class OpenSearchMonitor(core.Stack):
             "yum update -y",
             "yum install jq -y",
             "amazon-linux-extras install nginx1.12",
-            "cd /tmp/assets",
+            "mkdir -p /home/ec2-user/assets",
+            "cd /home/ec2-user/assets",
             "mv {} export_opensearch_dashboards_V1_0.ndjson".format(dashboards_asset_path),
             "mv {} nginx_opensearch.conf".format(nginx_asset_path),
             "mv {} create_alerts.sh".format(alerting_asset_path),
 
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
             "cp nginx_opensearch.conf /etc/nginx/conf.d/",
-            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /tmp/assets/export_opensearch_dashboards_V1_0.ndjson",
+            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /home/ec2-user/assets/export_opensearch_dashboards_V1_0.ndjson",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /etc/nginx/conf.d/nginx_opensearch.conf",
-            "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /tmp/assets/create_alerts.sh",
-            "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_cw_logs.role.role_arn + "=g' /tmp/assets/create_alerts.sh",
-            "sed -i 's=SNS_ROLE_ARN=" + sns_role.role_arn + "=g' /tmp/assets/create_alerts.sh",
-            "sed -i 's/SNS_TOPIC_ARN/" + sns_topic.topic_arn + "/g' /tmp/assets/create_alerts.sh",
-            "sed -i 's=DOMAIN_ADMIN_UNAME=" + DOMAIN_ADMIN_UNAME + "=g' /tmp/assets/create_alerts.sh",
-            "sed -i 's=DOMAIN_ADMIN_PW=" + DOMAIN_ADMIN_PW + "=g' /tmp/assets/create_alerts.sh",
+            "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /home/ec2-user/assets/create_alerts.sh",
+            "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_cw_logs.role.role_arn + "=g' /home/ec2-user/assets/create_alerts.sh",
+            "sed -i 's=SNS_ROLE_ARN=" + sns_role.role_arn + "=g' /home/ec2-user/assets/create_alerts.sh",
+            "sed -i 's/SNS_TOPIC_ARN/" + sns_topic.topic_arn + "/g' /home/ec2-user/assets/create_alerts.sh",
+            "sed -i 's=DOMAIN_ADMIN_UNAME=" + DOMAIN_ADMIN_UNAME + "=g' /home/ec2-user/assets/create_alerts.sh",
+            "sed -i 's=DOMAIN_ADMIN_PW=" + DOMAIN_ADMIN_PW + "=g' /home/ec2-user/assets/create_alerts.sh",
 
             "systemctl restart nginx.service",
             "chmod 500 create_alerts.sh",
@@ -310,11 +312,11 @@ class OpenSearchMonitor(core.Stack):
             "bash --verbose create_alerts.sh",
         )
 
-        core.CfnOutput(self, "Dashboards URL (via Jump host)",
+        CfnOutput(self, "Dashboards URL (via Jump host)",
                         value="https://" + instance.instance_public_ip,
                         description="Dashboards URL via Jump host")
 
-        core.CfnOutput(self, "SNS Subscription Alert Message",
+        CfnOutput(self, "SNS Subscription Alert Message",
                         value=SNS_NOTIFICATION_EMAIL,
                         description="Please confirm your SNS subscription receievedt at")
 
