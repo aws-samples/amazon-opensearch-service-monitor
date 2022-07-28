@@ -234,7 +234,6 @@ class OpenSearchMonitor(Stack):
                                 vpc=vpc,
                                 machine_image=amzn_linux,
                                 vpc_subnets=sn_public,
-                                key_name=EC2_KEY_NAME,
                                 role=role,
                                 )
         instance.connections.allow_from_any_ipv4(ec2.Port.tcp(22), 'SSH')
