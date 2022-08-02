@@ -84,8 +84,11 @@ class OpenSearchMonitor(Stack):
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
         es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
 
+        vpc_subnets = ec2.SubnetSelection(
+            subnet_type=ec2.SubnetType.PUBLIC
+        )
         domain = opensearch.Domain(self, 'opensearch-service-monitor', 
-            version=opensearch.EngineVersion.OPENSEARCH_1_2, # Upgrade when CDK upgrades
+            version=opensearch.EngineVersion.OPENSEARCH_1_3, # Upgrade when CDK upgrades
             domain_name=DOMAIN_NAME,
             removal_policy=RemovalPolicy.DESTROY,
             capacity=opensearch.CapacityConfig(
@@ -102,7 +105,7 @@ class OpenSearchMonitor(Stack):
                 volume_type=ec2.EbsDeviceVolumeType.GP2
             ),
             vpc=vpc,
-            vpc_subnets=[ec2.SubnetType.PUBLIC],
+            vpc_subnets=[vpc_subnets],
             security_groups=[es_sec_grp],
             zone_awareness=opensearch.ZoneAwarenessConfig(
                 enabled=True,
