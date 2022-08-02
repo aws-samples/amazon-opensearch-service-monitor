@@ -60,7 +60,7 @@ $ source .env/bin/activate
 
 ### Bootstrap the CDK
 
-Create the CDK configuration by bootstrapping the CDK.
+Create the CDK configuration by bootstrapping the CDK (one-time activity for each region).
 
 ```bash
 # bootstrap the cdk
