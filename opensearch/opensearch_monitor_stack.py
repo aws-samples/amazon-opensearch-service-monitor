@@ -88,7 +88,7 @@ class OpenSearchMonitor(Stack):
             subnet_type=ec2.SubnetType.PUBLIC
         )
         domain = opensearch.Domain(self, 'opensearch-service-monitor', 
-            version=opensearch.EngineVersion.OPENSEARCH_1_3, # Upgrade when CDK upgrades
+            version=opensearch.EngineVersion.OPENSEARCH_2_3, # Upgrade when CDK upgrades
             domain_name=DOMAIN_NAME,
             removal_policy=RemovalPolicy.DESTROY,
             capacity=opensearch.CapacityConfig(

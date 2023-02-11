@@ -78,7 +78,6 @@ function transform(payload) {
 
         var action = { "index": {} };
         action.index._index = indexName;
-        action.index._type = '_doc';
         action.index._id = logEvent.id;
         
         // Use pipeline for application log and slow logs as they does not come as json
