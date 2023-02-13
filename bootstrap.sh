@@ -6,8 +6,10 @@ python3 -m venv .env
 source .env/bin/activate
 # download requirements
 .env/bin/python -m pip install -r requirements.txt --upgrade pip
-# Load dependency for lambda functions
+# Load dependency for lambda functions,
 .env/bin/python -m pip install --target CWMetricsToOpenSearch/ -r CWMetricsToOpenSearch/requirements.txt
+# and add boto3 which would be added as layer for metrics, as latest boto3 is needed for serverless collection
+.env/bin/python -m pip install boto3 -t boto3-layer/python
 
 # Set region to deploy the stack
 region_default="us-east-1"
