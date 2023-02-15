@@ -1,6 +1,6 @@
 # Amazon OpenSearch Service Monitor
 
-This repository contains step by step demonstration to setup monitoring Stack for Amazon OpenSearch Service domains across all specified regions. This example uses AWS CDK and Python.
+This repository contains step by step demonstration to set up monitoring Stack for Amazon OpenSearch Service domains and Amazon OpenSearch Serverless collections across all specified regions. This example uses AWS CDK and Python.
 
 
 ## Table of Contents
@@ -14,8 +14,8 @@ This repository contains step by step demonstration to setup monitoring Stack fo
 7. [Total Cost of Ownership](#tco)
 
 ## Context <a name="context"></a>
-Amazon OpenSearch Service is a fully managed service that makes it easy for you to deploy, secure, and run OpenSearch cost effectively at scale. Customers often have an issue to manage and monitor multiple Amazon OpenSearch Service domains as those metrics and logs are not available at centralized place for troubleshooting the issue. 
-This example helps you to configure a monitoring for Amazon OpenSearch Service domains, which will fetch the Cloudwatch Metrics and Cloudwatch logs from all domains at a regular interval. This example also comes with pre-built OpenSearch dashboards and Alerts. 
+Amazon OpenSearch Service is a fully managed service that makes it easy for you to deploy, secure, and run OpenSearch cost effectively at scale. Customers often have an issue to manage and monitor multiple Amazon OpenSearch Service domains and OpenSearch Serverless collection as those metrics and logs are not available at centralized place for troubleshooting the issue. 
+This example helps you to configure a monitoring for Amazon OpenSearch Service domains, and OpenSearch Serverless collections which will fetch the Cloudwatch Metrics and Cloudwatch logs from all domains/collections at a regular interval. This example also comes with pre-built OpenSearch dashboards and Alerts. 
 
 ## Architecture
 ![architecture](/images/amazon_opensearch_service_monitor_framework.png)
@@ -74,11 +74,11 @@ Create the CDK configuration by bootstrapping the CDK (one-time activity for eac
 ## Deploy <a name="deploy"></a>
 Use the AWS CDK to deploy opensearch stack for Amazon OpenSearch Service. This stack comprises of creating/deploying below components:
 1. Create VPC with 3 AZ
-2. Create and launch Amazon OpenSearch Service cluster (version 1.0) having two t3.medium data nodes with 100GB of EBS storage volume. These 2 nodes are spread across 2 different AZ's
+2. Create and launch Amazon OpenSearch Service cluster (version 2.3) having two t3.medium data nodes with 100GB of EBS storage volume. These 2 nodes are spread across 2 different AZ's
 3. Create Dynamo DB table for timestamp tracking 
 4. Create lambda function to fetch Cloudwatch metrics across all regions and all domains. By default it fetches the data every 5 min, which can be changed if needed. 
 5. Create and launch an EC2 instance which acts as SSH tunnel to access dashboards, as all of our setup is secured and in VPC
-6. Create default OpenSearch dashboards to visualize metrics across all domains
+6. Create default OpenSearch dashboards to visualize metrics across all domains and collections
 7. Create and setup default e-mail alerts to newly launched Amazon OpenSearch Service cluster
 8. Create Index template and Index State Management (ISM) policy to delete indices older than 366 days. (can be changed to different retention if needed)
 9. Monitoring stack has an option to enable Ultra Warm (UW) which is disabled by default, Change settings [in this file](opensearch/opensearch_monitor_stack.py) to enable UW.
@@ -112,7 +112,7 @@ The CDK will prompt to apply Security Changes, input "y" for Yes.
 -----
 
 ## Pre-built Monitoring Dashboards <a name="dashboards"></a>
-  Monitoring domain comes with pre-built dashboards which can be accessed as below:
+  Monitoring domain comes with pre-built dashboards for OpenSearch Service and OpenSearch Serverless collection metrics, these dashboards can be accessed as below:
   1. Login to Dashboards: Access OpenSearch Dashboards with an IP obtained after the deployment and login as below
       ![Dashboards login screen](/images/opensearch_dashboards_login.png)
 
@@ -122,17 +122,24 @@ The CDK will prompt to apply Security Changes, input "y" for Yes.
   3. After clicking on dashboard, it displays list of the dashboard which comes as default
       ![OpenSearch Dashboards List](/images/opensearch_dashboards_list.png)
 
-   - **Domain Metrics At A glance** : This gives a 360 degree view of all Amazon OpenSearch Service domains across the regions. 
+   - **Domain Metrics** : This gives a 360 degree view of all Amazon OpenSearch Service domains across the regions. 
       ![Domain Metrics At A glance](/images/opensearch_domain_metrics_at_a_glance.png)
    
    - **Domain Overview** :  This gives a more detailed metrics for a particular domain, could help to deep dive for issues into a specific domain. 
       ![Domain Overview](/images/opensearch_domain_overview.png)
 
+   - **Serverless Collection Metrics** : This gives a 360 degree view of all Amazon OpenSearch Serverless collections across the regions.
+     ![Domain Metrics At A glance](/images/opensearch_collection_metrics.png)
+
+   - **Serverless Collection Overview** :  This gives a more detailed metrics for a particular collection, could help to deep dive for issues into a specific collection.
+     ![Domain Overview](/images/opensearch_collection_overview.png)
+
 -----
 
 ## Pre-built Alerts <a name="alerts"></a>
 
-  Monioring domains comes with pre-built alerts as below, which could help to get notified as an email alert for event such as Cluster Health, Disk Issue, Memory Issue , JVM issue etc. 
+  Monitoring domains comes with pre-built alerts as below, which could help to get notified as an email alert for event such as Cluster Health, Disk Issue, Memory Issue , JVM issue etc.
+These alerts are built for OpenSearch Service domains metrics. 
   
 | Alert Type                    | Frequency     |
 | ----------------------------- | ------------- |
