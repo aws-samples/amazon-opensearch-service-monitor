@@ -1,0 +1,566 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "opensearch-monitor-stack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "opensearch-monitor-stack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "opensearch-monitor-stack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "opensearch-monitor-stack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a8874f65891703ce678ab9cda1e81dc0ac52d3d9149d66d1d9858732c57c1428.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "opensearch-monitor-stack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "opensearch-monitor-stack.assets"
+      ],
+      "metadata": {
+        "/opensearch-monitor-stack/Monitoring VPC/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCFE778483"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet1RouteTable01532BA7"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet1RouteTableAssociation6604327E"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet1DefaultRoute94E33420"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet1EIPF1A54A6D"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet1NATGateway2674041D"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet2RouteTableB7769C92"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet2RouteTableAssociationE255717F"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet2DefaultRoute27C60BFF"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet2EIPC9A952CD"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPublicSubnet2NATGateway38706D45"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet1RouteTable98993195"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet2RouteTable99597E2E"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCIGW8FAED5C8"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring VPC/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringVPCVPCGW37A277DA"
+          }
+        ],
+        "/opensearch-monitor-stack/OpenSearchSecGrpMonitoring/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchSecGrpMonitoring16B9A792"
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-service-monitor": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": "amazon-opensearch-monitor"
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-service-monitor/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "opensearchservicemonitorA744B406"
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "installLatestAwsSdk was not specified, and defaults to true. You probably do not want this. Set the global context flag '@aws-cdk/customresources:installLatestAwsSdkDefault' to false to switch this behavior off project-wide, or set the property explicitly to true if you know you need to call APIs that are not in Lambda's built-in SDK version.",
+            "trace": [
+              "Annotations.addMessage (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/core/lib/annotations.js:86:29)",
+              "Annotations.addWarning (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/core/lib/annotations.js:34:14)",
+              "new AwsCustomResource (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/custom-resources/lib/aws-custom-resource/aws-custom-resource.js:201:41)",
+              "new OpenSearchAccessPolicy (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/aws-opensearchservice/lib/opensearch-access-policy.js:12:9)",
+              "Domain.addAccessPolicies (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/aws-opensearchservice/lib/domain.js:811:37)",
+              "new Domain (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/aws-opensearchservice/lib/domain.js:782:18)",
+              "Kernel._create (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:9964:29)",
+              "Kernel.create (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:9693:29)",
+              "KernelHost.processRequest (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:11544:36)",
+              "KernelHost.run (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:11504:22)",
+              "Immediate._onImmediate (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:11505:46)",
+              "process.processImmediate (node:internal/timers:478:21)"
+            ]
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "opensearchservicemonitorAccessPolicy0F9DF600"
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/CustomResourcePolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "opensearchservicemonitorAccessPolicyCustomResourcePolicyC29F3A65"
+          }
+        ],
+        "/opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ],
+        "/opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWS679f53fac002430cb0da5b7982bd22872D164C4C"
+          }
+        ],
+        "/opensearch-monitor-stack/MasterUser": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MasterUser"
+          }
+        ],
+        "/opensearch-monitor-stack/MasterPW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MasterPW"
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-monitor-lambda-timestamp": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "opensearchmonitorlambdatimestamp76CC1DB8"
+            }
+          }
+        ],
+        "/opensearch-monitor-stack/opensearch-monitor-lambda-timestamp/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "opensearchmonitorlambdatimestamp76CC1DB8"
+          }
+        ],
+        "/opensearch-monitor-stack/Boto3LambdaLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Boto3LambdaLayer1677E1BB"
+          }
+        ],
+        "/opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWMetricsToOpenSearchServiceRoleF9C3BA90"
+          }
+        ],
+        "/opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWMetricsToOpenSearchServiceRoleDefaultPolicyB9DBB3D2"
+          }
+        ],
+        "/opensearch-monitor-stack/CWMetricsToOpenSearch/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWMetricsToOpenSearchSecurityGroup9EAA548A"
+          }
+        ],
+        "/opensearch-monitor-stack/CWMetricsToOpenSearch/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWMetricsToOpenSearch03C14766"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Monitoring19FB5217"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring/AllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D9": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringAllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D94425F8DE"
+          }
+        ],
+        "/opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C"
+          }
+        ],
+        "/opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRoleDefaultPolicy3F642194"
+          }
+        ],
+        "/opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainSecurityGroup31B9C552"
+          }
+        ],
+        "/opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainEACC96CF"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring DINS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringDINS01A68BE7"
+          }
+        ],
+        "/opensearch-monitor-stack/Monitoring DINS/AllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MonitoringDINSAllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F704B482E5F"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchServiceRole49C66B35"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchServiceRoleDefaultPolicyCFADFA08"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchSecurityGroup5F065EE6"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchCE2EB2BE"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-east-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionuseast145215752"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-east-2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionuseast2AF8050DF"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-west-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionuswest1C0CA1F9A"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-west-2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionuswest2B728F769"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-south-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionapsouth14A2811C9"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-northeast-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionapnortheast16B48A9B0"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-northeast-2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionapnortheast2ACC34E45"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-southeast-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionapsoutheast1D161E120"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-southeast-2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionapsoutheast222CA1021"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ca-central-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissioncacentral12C85913D"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-central-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissioneucentral1724850D3"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissioneuwest1D58A5F9A"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissioneuwest2FDDA54BB"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-3": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissioneuwest38F4EC8ED"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-north-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissioneunorth1FE7B7F76"
+          }
+        ],
+        "/opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-sa-east-1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CWLogsToOpenSearchlambdacwlogspermissionsaeast1EE1EBEEF"
+          }
+        ],
+        "/opensearch-monitor-stack/InstanceSSM/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InstanceSSMCBFA3CF0"
+          }
+        ],
+        "/opensearch-monitor-stack/InstanceSSM/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InstanceSSMDefaultPolicy6E4EFE93"
+          }
+        ],
+        "/opensearch-monitor-stack/instance/InstanceSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "instanceInstanceSecurityGroup725C795D"
+          }
+        ],
+        "/opensearch-monitor-stack/instance/InstanceProfile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "instanceInstanceProfile931F14E3"
+          }
+        ],
+        "/opensearch-monitor-stack/instance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "instanceB7CCE687"
+          }
+        ],
+        "/opensearch-monitor-stack/SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter"
+          }
+        ],
+        "/opensearch-monitor-stack/cdk_monitoring_topic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cdkmonitoringtopicA6111042"
+          }
+        ],
+        "/opensearch-monitor-stack/cdk_monitoring_topic/prasadnu@amazon.com/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cdkmonitoringtopicprasadnuamazoncomFD5965D3"
+          }
+        ],
+        "/opensearch-monitor-stack/cdk_monitoring_policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cdkmonitoringpolicyFA836FCC"
+          }
+        ],
+        "/opensearch-monitor-stack/cdk_monitoring_sns_role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cdkmonitoringsnsrole2EEA3FC2"
+          }
+        ],
+        "/opensearch-monitor-stack/Dashboards URL (via Jump host)": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DashboardsURLviaJumphost"
+          }
+        ],
+        "/opensearch-monitor-stack/SNS Subscription Alert Message": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SNSSubscriptionAlertMessage"
+          }
+        ],
+        "/opensearch-monitor-stack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/opensearch-monitor-stack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/opensearch-monitor-stack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/opensearch-monitor-stack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "opensearch-monitor-stack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

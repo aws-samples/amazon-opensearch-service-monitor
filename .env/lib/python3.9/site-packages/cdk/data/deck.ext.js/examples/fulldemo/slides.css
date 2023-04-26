@@ -1,0 +1,72 @@
+@media screen {
+  .deck-container {
+    /********************** html tags ***************************/
+    /********************** deck tags ***************************/
+    /********************** slides tags ***************************/
+    /********************** asvg tags** ***************************/
+    /********************** custom tags ***************************/ }
+    .deck-container table {
+      display: table !important; }
+      .deck-container table tr {
+        display: table-row;
+        width: 100%; }
+      .deck-container table td {
+        display: table-cell; }
+    .deck-container .deck-status, .deck-container .deck-toc-status {
+      height: 22px; }
+      .deck-container .deck-status td, .deck-container .deck-toc-status td {
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 3px;
+        padding-bottom: 3px; }
+    .deck-container .deck-toc-status .deck-toc-h2 {
+      width: 50%; }
+    .deck-container .deck-toc-status .deck-toc-h3 {
+      width: 50%; }
+    .deck-container #title-slide h1 {
+      margin-top: 200px; }
+    .deck-container #title-slide .info {
+      text-shadow: none; }
+    .deck-container .half {
+      width: 40%;
+      display: inline-block; }
+    .deck-container .centerbox {
+      display: block;
+      position: relative;
+      text-align: center; }
+    .deck-container .left {
+      text-align: left; }
+    .deck-container .center {
+      text-align: center; }
+    .deck-container .right {
+      text-align: right; } }
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important; }
+
+  a, a:visited {
+    text-decoration: none; }
+
+  pre, blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid; }
+
+  @page {
+    margin: 0.5cm; }
+
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3; }
+
+  h2, h3 {
+    page-break-after: avoid; }
+
+  header, footer, #intro p, .goto-form, .deck-prev-link, .deck-next-link, .deck-status {
+    display: none; }
+
+  article {
+    width: auto !important;
+    font-size: 12pt; }
+    article > .slide {
+      page-break-after: always; } }

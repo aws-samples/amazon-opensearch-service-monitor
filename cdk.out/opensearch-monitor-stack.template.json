@@ -1,0 +1,2462 @@
+{
+ "Resources": {
+  "MonitoringVPCFE778483": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/Resource"
+   }
+  },
+  "MonitoringVPCPublicSubnet1Subnet86C63F1C": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/Subnet"
+   }
+  },
+  "MonitoringVPCPublicSubnet1RouteTable01532BA7": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/RouteTable"
+   }
+  },
+  "MonitoringVPCPublicSubnet1RouteTableAssociation6604327E": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPublicSubnet1RouteTable01532BA7"
+    },
+    "SubnetId": {
+     "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "MonitoringVPCPublicSubnet1DefaultRoute94E33420": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPublicSubnet1RouteTable01532BA7"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "MonitoringVPCIGW8FAED5C8"
+    }
+   },
+   "DependsOn": [
+    "MonitoringVPCVPCGW37A277DA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "MonitoringVPCPublicSubnet1EIPF1A54A6D": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/EIP"
+   }
+  },
+  "MonitoringVPCPublicSubnet1NATGateway2674041D": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "MonitoringVPCPublicSubnet1EIPF1A54A6D",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPublicSubnet1DefaultRoute94E33420",
+    "MonitoringVPCPublicSubnet1RouteTableAssociation6604327E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/NATGateway"
+   }
+  },
+  "MonitoringVPCPublicSubnet2Subnet2942B0B2": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/Subnet"
+   }
+  },
+  "MonitoringVPCPublicSubnet2RouteTableB7769C92": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/RouteTable"
+   }
+  },
+  "MonitoringVPCPublicSubnet2RouteTableAssociationE255717F": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPublicSubnet2RouteTableB7769C92"
+    },
+    "SubnetId": {
+     "Ref": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "MonitoringVPCPublicSubnet2DefaultRoute27C60BFF": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPublicSubnet2RouteTableB7769C92"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "MonitoringVPCIGW8FAED5C8"
+    }
+   },
+   "DependsOn": [
+    "MonitoringVPCVPCGW37A277DA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "MonitoringVPCPublicSubnet2EIPC9A952CD": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/EIP"
+   }
+  },
+  "MonitoringVPCPublicSubnet2NATGateway38706D45": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "MonitoringVPCPublicSubnet2EIPC9A952CD",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPublicSubnet2DefaultRoute27C60BFF",
+    "MonitoringVPCPublicSubnet2RouteTableAssociationE255717F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/NATGateway"
+   }
+  },
+  "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/Subnet"
+   }
+  },
+  "MonitoringVPCPrivateSubnet1RouteTable98993195": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/RouteTable"
+   }
+  },
+  "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPrivateSubnet1RouteTable98993195"
+    },
+    "SubnetId": {
+     "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/RouteTableAssociation"
+   }
+  },
+  "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPrivateSubnet1RouteTable98993195"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "MonitoringVPCPublicSubnet1NATGateway2674041D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/DefaultRoute"
+   }
+  },
+  "MonitoringVPCPrivateSubnet2Subnet6FE979A8": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.192.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/Subnet"
+   }
+  },
+  "MonitoringVPCPrivateSubnet2RouteTable99597E2E": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/RouteTable"
+   }
+  },
+  "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPrivateSubnet2RouteTable99597E2E"
+    },
+    "SubnetId": {
+     "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/RouteTableAssociation"
+   }
+  },
+  "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "MonitoringVPCPrivateSubnet2RouteTable99597E2E"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "MonitoringVPCPublicSubnet2NATGateway38706D45"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/DefaultRoute"
+   }
+  },
+  "MonitoringVPCIGW8FAED5C8": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/Monitoring VPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/IGW"
+   }
+  },
+  "MonitoringVPCVPCGW37A277DA": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    },
+    "InternetGatewayId": {
+     "Ref": "MonitoringVPCIGW8FAED5C8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring VPC/VPCGW"
+   }
+  },
+  "OpenSearchSecGrpMonitoring16B9A792": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "opensearch-monitor-stack/OpenSearchSecGrpMonitoring",
+    "GroupName": "OpenSearchSecGrpMonitoring",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:443",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/OpenSearchSecGrpMonitoring/Resource"
+   }
+  },
+  "opensearchservicemonitorA744B406": {
+   "Type": "AWS::OpenSearchService::Domain",
+   "Properties": {
+    "AdvancedSecurityOptions": {
+     "Enabled": true,
+     "InternalUserDatabaseEnabled": true,
+     "MasterUserOptions": {
+      "MasterUserName": "opensearch",
+      "MasterUserPassword": "G581FZoTXqbKyuN1!"
+     }
+    },
+    "ClusterConfig": {
+     "DedicatedMasterEnabled": false,
+     "InstanceCount": 2,
+     "InstanceType": "m6g.large.search",
+     "ZoneAwarenessConfig": {
+      "AvailabilityZoneCount": 2
+     },
+     "ZoneAwarenessEnabled": true
+    },
+    "DomainEndpointOptions": {
+     "EnforceHTTPS": true,
+     "TLSSecurityPolicy": "Policy-Min-TLS-1-0-2019-07"
+    },
+    "DomainName": "amazon-opensearch-monitor",
+    "EBSOptions": {
+     "EBSEnabled": true,
+     "VolumeSize": 100,
+     "VolumeType": "gp2"
+    },
+    "EncryptionAtRestOptions": {
+     "Enabled": true
+    },
+    "EngineVersion": "OpenSearch_2.3",
+    "LogPublishingOptions": {},
+    "NodeToNodeEncryptionOptions": {
+     "Enabled": true
+    },
+    "VPCOptions": {
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "OpenSearchSecGrpMonitoring16B9A792",
+        "GroupId"
+       ]
+      }
+     ],
+     "SubnetIds": [
+      {
+       "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+      },
+      {
+       "Ref": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+      }
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/opensearch-service-monitor/Resource"
+   }
+  },
+  "opensearchservicemonitorAccessPolicy0F9DF600": {
+   "Type": "Custom::OpenSearchAccessPolicy",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+      "Arn"
+     ]
+    },
+    "Create": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"action\":\"updateDomainConfig\",\"service\":\"OpenSearch\",\"parameters\":{\"DomainName\":\"",
+       {
+        "Ref": "opensearchservicemonitorA744B406"
+       },
+       "\",\"AccessPolicies\":\"{\\\"Statement\\\":[{\\\"Action\\\":\\\"es:ESHttp*\\\",\\\"Effect\\\":\\\"Allow\\\",\\\"Principal\\\":{\\\"AWS\\\":\\\"*\\\"},\\\"Resource\\\":\\\"",
+       {
+        "Fn::GetAtt": [
+         "opensearchservicemonitorA744B406",
+         "Arn"
+        ]
+       },
+       "/*\\\"}],\\\"Version\\\":\\\"2012-10-17\\\"}\"},\"outputPaths\":[\"DomainConfig.AccessPolicies\"],\"physicalResourceId\":{\"id\":\"",
+       {
+        "Ref": "opensearchservicemonitorA744B406"
+       },
+       "AccessPolicy\"}}"
+      ]
+     ]
+    },
+    "Update": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"action\":\"updateDomainConfig\",\"service\":\"OpenSearch\",\"parameters\":{\"DomainName\":\"",
+       {
+        "Ref": "opensearchservicemonitorA744B406"
+       },
+       "\",\"AccessPolicies\":\"{\\\"Statement\\\":[{\\\"Action\\\":\\\"es:ESHttp*\\\",\\\"Effect\\\":\\\"Allow\\\",\\\"Principal\\\":{\\\"AWS\\\":\\\"*\\\"},\\\"Resource\\\":\\\"",
+       {
+        "Fn::GetAtt": [
+         "opensearchservicemonitorA744B406",
+         "Arn"
+        ]
+       },
+       "/*\\\"}],\\\"Version\\\":\\\"2012-10-17\\\"}\"},\"outputPaths\":[\"DomainConfig.AccessPolicies\"],\"physicalResourceId\":{\"id\":\"",
+       {
+        "Ref": "opensearchservicemonitorA744B406"
+       },
+       "AccessPolicy\"}}"
+      ]
+     ]
+    },
+    "InstallLatestAwsSdk": true
+   },
+   "DependsOn": [
+    "opensearchservicemonitorAccessPolicyCustomResourcePolicyC29F3A65"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/Resource/Default"
+   }
+  },
+  "opensearchservicemonitorAccessPolicyCustomResourcePolicyC29F3A65": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "es:UpdateDomainConfig",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "opensearchservicemonitorA744B406",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "opensearchservicemonitorAccessPolicyCustomResourcePolicyC29F3A65",
+    "Roles": [
+     {
+      "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/CustomResourcePolicy/Resource"
+   }
+  },
+  "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource"
+   }
+  },
+  "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "a9d3d4d1afa000946b9863b3e7578a5a5ad86d88274b3639938aa2baebf822ce.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      "Arn"
+     ]
+    },
+    "Handler": "index.handler",
+    "Runtime": "nodejs14.x",
+    "Timeout": 120
+   },
+   "DependsOn": [
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/Resource",
+    "aws:asset:path": "asset.a9d3d4d1afa000946b9863b3e7578a5a5ad86d88274b3639938aa2baebf822ce",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "opensearchmonitorlambdatimestamp76CC1DB8": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "domain",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "region",
+      "KeyType": "RANGE"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "domain",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "region",
+      "AttributeType": "S"
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 5,
+     "WriteCapacityUnits": 5
+    },
+    "TableName": "timestamps"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/opensearch-monitor-lambda-timestamp/Resource"
+   }
+  },
+  "Boto3LambdaLayer1677E1BB": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "1467af2822b0ca5a28b26d3aa607010e258b10c0853dbf9a9bc253387cd036df.zip"
+    },
+    "CompatibleRuntimes": [
+     "python3.8"
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Boto3LambdaLayer/Resource",
+    "aws:asset:path": "asset.1467af2822b0ca5a28b26d3aa607010e258b10c0853dbf9a9bc253387cd036df",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "CWMetricsToOpenSearchServiceRoleF9C3BA90": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/Resource"
+   }
+  },
+  "CWMetricsToOpenSearchServiceRoleDefaultPolicyB9DBB3D2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "opensearchmonitorlambdatimestamp76CC1DB8",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "opensearchmonitorlambdatimestamp76CC1DB8",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": "es:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "cloudwatch:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "aoss:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CWMetricsToOpenSearchServiceRoleDefaultPolicyB9DBB3D2",
+    "Roles": [
+     {
+      "Ref": "CWMetricsToOpenSearchServiceRoleF9C3BA90"
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CWMetricsToOpenSearchSecurityGroup9EAA548A": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatic security group for Lambda Function opensearchmonitorstackCWMetricsToOpenSearch0126C3D9",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    }
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWMetricsToOpenSearch/SecurityGroup/Resource"
+   }
+  },
+  "CWMetricsToOpenSearch03C14766": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "28d9ba246102d13c8036a144942384f76137c8869de660f5fc7f27492c7a0422.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "CWMetricsToOpenSearchServiceRoleF9C3BA90",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE": {
+       "Ref": "opensearchmonitorlambdatimestamp76CC1DB8"
+      },
+      "DOMAIN_ENDPOINT": {
+       "Fn::Join": [
+        "",
+        [
+         "https://",
+         {
+          "Fn::GetAtt": [
+           "opensearchservicemonitorA744B406",
+           "DomainEndpoint"
+          ]
+         }
+        ]
+       ]
+      },
+      "DOMAIN_ADMIN_UNAME": "opensearch",
+      "DOMAIN_ADMIN_PW": "G581FZoTXqbKyuN1!",
+      "REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ap-south-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ca-central-1\", \"eu-central-1\", \"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-north-1\", \"sa-east-1\"]",
+      "SERVERLESS_REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"ap-northeast-1\", \"ap-southeast-1\", \"ap-southeast-2\", \"eu-central-1\", \"eu-west-1\"]"
+     }
+    },
+    "FunctionName": "CWMetricsToOpenSearch_monitoring",
+    "Handler": "handler.handler",
+    "Layers": [
+     {
+      "Ref": "Boto3LambdaLayer1677E1BB"
+     }
+    ],
+    "MemorySize": 1024,
+    "Runtime": "python3.8",
+    "Timeout": 600,
+    "VpcConfig": {
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "CWMetricsToOpenSearchSecurityGroup9EAA548A",
+        "GroupId"
+       ]
+      }
+     ],
+     "SubnetIds": [
+      {
+       "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+      },
+      {
+       "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "CWMetricsToOpenSearchServiceRoleDefaultPolicyB9DBB3D2",
+    "CWMetricsToOpenSearchServiceRoleF9C3BA90",
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWMetricsToOpenSearch/Resource",
+    "aws:asset:path": "asset.28d9ba246102d13c8036a144942384f76137c8869de660f5fc7f27492c7a0422",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "Monitoring19FB5217": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "ScheduleExpression": "rate(5 minutes)",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "CWMetricsToOpenSearch03C14766",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring/Resource"
+   }
+  },
+  "MonitoringAllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D94425F8DE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWMetricsToOpenSearch03C14766",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "Monitoring19FB5217",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring/AllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D9"
+   }
+  },
+  "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/Resource"
+   }
+  },
+  "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRoleDefaultPolicy3F642194": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "es:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "cloudwatch:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "aoss:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRoleDefaultPolicy3F642194",
+    "Roles": [
+     {
+      "Ref": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C"
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainSecurityGroup31B9C552": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatic security group for Lambda Function opensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    }
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/SecurityGroup/Resource"
+   }
+  },
+  "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainEACC96CF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "c44557a7744f2148388afb448fea94fd7ef1aaf82c59509e1e6c18aca4161e1f.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE": {
+       "Ref": "opensearchmonitorlambdatimestamp76CC1DB8"
+      },
+      "DOMAIN_ENDPOINT": {
+       "Fn::Join": [
+        "",
+        [
+         "https://",
+         {
+          "Fn::GetAtt": [
+           "opensearchservicemonitorA744B406",
+           "DomainEndpoint"
+          ]
+         }
+        ]
+       ]
+      },
+      "DOMAIN_ADMIN_UNAME": "opensearch",
+      "DOMAIN_ADMIN_PW": "G581FZoTXqbKyuN1!",
+      "REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ap-south-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ca-central-1\", \"eu-central-1\", \"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-north-1\", \"sa-east-1\"]",
+      "SERVERLESS_REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"ap-northeast-1\", \"ap-southeast-1\", \"ap-southeast-2\", \"eu-central-1\", \"eu-west-1\"]"
+     }
+    },
+    "FunctionName": "Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain",
+    "Handler": "handler.handler",
+    "Layers": [
+     {
+      "Ref": "Boto3LambdaLayer1677E1BB"
+     }
+    ],
+    "MemorySize": 1024,
+    "Runtime": "python3.8",
+    "Timeout": 600,
+    "VpcConfig": {
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainSecurityGroup31B9C552",
+        "GroupId"
+       ]
+      }
+     ],
+     "SubnetIds": [
+      {
+       "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+      },
+      {
+       "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRoleDefaultPolicy3F642194",
+    "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C",
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/Resource",
+    "aws:asset:path": "asset.c44557a7744f2148388afb448fea94fd7ef1aaf82c59509e1e6c18aca4161e1f",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "MonitoringDINS01A68BE7": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "ScheduleExpression": "cron(0 12 * * ? *)",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainEACC96CF",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring DINS/Resource"
+   }
+  },
+  "MonitoringDINSAllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F704B482E5F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainEACC96CF",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "MonitoringDINS01A68BE7",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/Monitoring DINS/AllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70"
+   }
+  },
+  "CWLogsToOpenSearchServiceRole49C66B35": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/Resource"
+   }
+  },
+  "CWLogsToOpenSearchServiceRoleDefaultPolicyCFADFA08": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "es:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "logs:*",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CWLogsToOpenSearchServiceRoleDefaultPolicyCFADFA08",
+    "Roles": [
+     {
+      "Ref": "CWLogsToOpenSearchServiceRole49C66B35"
+     }
+    ]
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CWLogsToOpenSearchSecurityGroup5F065EE6": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatic security group for Lambda Function opensearchmonitorstackCWLogsToOpenSearchAEBFCAC1",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    }
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/SecurityGroup/Resource"
+   }
+  },
+  "CWLogsToOpenSearchCE2EB2BE": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "786afed9aa0c04ff262c3a4fd3ffc9d35c246e7590544add4950454957fa7575.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchServiceRole49C66B35",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "DOMAIN_ENDPOINT": {
+       "Fn::GetAtt": [
+        "opensearchservicemonitorA744B406",
+        "DomainEndpoint"
+       ]
+      }
+     }
+    },
+    "FunctionName": "CWLogsToOpenSearch_monitoring",
+    "Handler": "index.handler",
+    "Runtime": "nodejs12.x",
+    "VpcConfig": {
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "CWLogsToOpenSearchSecurityGroup5F065EE6",
+        "GroupId"
+       ]
+      }
+     ],
+     "SubnetIds": [
+      {
+       "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+      },
+      {
+       "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "CWLogsToOpenSearchServiceRoleDefaultPolicyCFADFA08",
+    "CWLogsToOpenSearchServiceRole49C66B35",
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/Resource",
+    "aws:asset:path": "asset.786afed9aa0c04ff262c3a4fd3ffc9d35c246e7590544add4950454957fa7575",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionuseast145215752": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:us-east-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-east-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionuseast2AF8050DF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:us-east-2:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-east-2"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionuswest1C0CA1F9A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:us-west-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-west-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionuswest2B728F769": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:us-west-2:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-west-2"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionapsouth14A2811C9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:ap-south-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-south-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionapnortheast16B48A9B0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:ap-northeast-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-northeast-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionapnortheast2ACC34E45": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:ap-northeast-2:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-northeast-2"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionapsoutheast1D161E120": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:ap-southeast-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-southeast-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionapsoutheast222CA1021": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:ap-southeast-2:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-southeast-2"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissioncacentral12C85913D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:ca-central-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ca-central-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissioneucentral1724850D3": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:eu-central-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-central-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissioneuwest1D58A5F9A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:eu-west-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissioneuwest2FDDA54BB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:eu-west-2:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-2"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissioneuwest38F4EC8ED": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:eu-west-3:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-3"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissioneunorth1FE7B7F76": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:eu-north-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-north-1"
+   }
+  },
+  "CWLogsToOpenSearchlambdacwlogspermissionsaeast1EE1EBEEF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CWLogsToOpenSearchCE2EB2BE",
+      "Arn"
+     ]
+    },
+    "Principal": "logs.amazonaws.com",
+    "SourceArn": "arn:aws:logs:sa-east-1:445083327804:*:*:*"
+   },
+   "DependsOn": [
+    "MonitoringVPCPrivateSubnet1DefaultRouteFFDDAAA6",
+    "MonitoringVPCPrivateSubnet1RouteTableAssociation7B6C7D5F",
+    "MonitoringVPCPrivateSubnet2DefaultRoute5851EBBD",
+    "MonitoringVPCPrivateSubnet2RouteTableAssociationAF92040F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-sa-east-1"
+   }
+  },
+  "InstanceSSMCBFA3CF0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ec2.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonSSMManagedInstanceCore"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/InstanceSSM/Resource"
+   }
+  },
+  "InstanceSSMDefaultPolicy6E4EFE93": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "es:*",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "opensearchservicemonitorA744B406",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::",
+           {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+           }
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::",
+           {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "InstanceSSMDefaultPolicy6E4EFE93",
+    "Roles": [
+     {
+      "Ref": "InstanceSSMCBFA3CF0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/InstanceSSM/DefaultPolicy/Resource"
+   }
+  },
+  "instanceInstanceSecurityGroup725C795D": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "opensearch-monitor-stack/instance/InstanceSecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "SSH",
+      "FromPort": 22,
+      "IpProtocol": "tcp",
+      "ToPort": 22
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "HTTPS",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/instance"
+     }
+    ],
+    "VpcId": {
+     "Ref": "MonitoringVPCFE778483"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/instance/InstanceSecurityGroup/Resource"
+   }
+  },
+  "instanceInstanceProfile931F14E3": {
+   "Type": "AWS::IAM::InstanceProfile",
+   "Properties": {
+    "Roles": [
+     {
+      "Ref": "InstanceSSMCBFA3CF0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/instance/InstanceProfile"
+   }
+  },
+  "instanceB7CCE687": {
+   "Type": "AWS::EC2::Instance",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "IamInstanceProfile": {
+     "Ref": "instanceInstanceProfile931F14E3"
+    },
+    "ImageId": {
+     "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter"
+    },
+    "InstanceType": "t3.nano",
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "instanceInstanceSecurityGroup725C795D",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "opensearch-monitor-stack/instance"
+     }
+    ],
+    "UserData": {
+     "Fn::Base64": {
+      "Fn::Join": [
+       "",
+       [
+        "#!/bin/bash\nmkdir -p $(dirname '/tmp/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson')\naws s3 cp 's3://",
+        {
+         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+        },
+        "/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson' '/tmp/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson'\nmkdir -p $(dirname '/tmp/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson')\naws s3 cp 's3://",
+        {
+         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+        },
+        "/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson' '/tmp/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson'\nmkdir -p $(dirname '/tmp/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf')\naws s3 cp 's3://",
+        {
+         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+        },
+        "/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf' '/tmp/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf'\nmkdir -p $(dirname '/tmp/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh')\naws s3 cp 's3://",
+        {
+         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+        },
+        "/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh' '/tmp/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh'\nyum update -y\nyum install jq -y\namazon-linux-extras install nginx1.12\nmkdir -p /home/ec2-user/assets\ncd /home/ec2-user/assets\nmv /tmp/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson export_opensearch_dashboards_V1_0.ndjson\nmv /tmp/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson export_domain_indices_shards_config.ndjson\nmv /tmp/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf nginx_opensearch.conf\nmv /tmp/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh create_alerts.sh\nopenssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\ncp nginx_opensearch.conf /etc/nginx/conf.d/\nsed -i 's/DEFAULT_DOMAIN_NAME/amazon-opensearch-monitor/g' /home/ec2-user/assets/export_opensearch_dashboards_V1_0.ndjson\nsed -i 's/DEFAULT_DOMAIN_NAME/amazon-opensearch-monitor/g' /home/ec2-user/assets/export_domain_indices_shards_config.ndjson\nsed -i 's/DOMAIN_ENDPOINT/",
+        {
+         "Fn::GetAtt": [
+          "opensearchservicemonitorA744B406",
+          "DomainEndpoint"
+         ]
+        },
+        "/g' /etc/nginx/conf.d/nginx_opensearch.conf\nsed -i 's/DOMAIN_ENDPOINT/",
+        {
+         "Fn::GetAtt": [
+          "opensearchservicemonitorA744B406",
+          "DomainEndpoint"
+         ]
+        },
+        "/g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=",
+        {
+         "Fn::GetAtt": [
+          "CWLogsToOpenSearchServiceRole49C66B35",
+          "Arn"
+         ]
+        },
+        "=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=SNS_ROLE_ARN=",
+        {
+         "Fn::GetAtt": [
+          "cdkmonitoringsnsrole2EEA3FC2",
+          "Arn"
+         ]
+        },
+        "=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's/SNS_TOPIC_ARN/",
+        {
+         "Ref": "cdkmonitoringtopicA6111042"
+        },
+        "/g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_UNAME=opensearch=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_PW=G581FZoTXqbKyuN1!=g' /home/ec2-user/assets/create_alerts.sh\nsystemctl restart nginx.service\nchmod 500 create_alerts.sh\nsleep 5\nbash --verbose create_alerts.sh"
+       ]
+      ]
+     }
+    }
+   },
+   "DependsOn": [
+    "InstanceSSMDefaultPolicy6E4EFE93",
+    "InstanceSSMCBFA3CF0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/instance/Resource"
+   }
+  },
+  "cdkmonitoringtopicA6111042": {
+   "Type": "AWS::SNS::Topic",
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/cdk_monitoring_topic/Resource"
+   }
+  },
+  "cdkmonitoringtopicprasadnuamazoncomFD5965D3": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Protocol": "email",
+    "TopicArn": {
+     "Ref": "cdkmonitoringtopicA6111042"
+    },
+    "Endpoint": "prasadnu@amazon.com"
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/cdk_monitoring_topic/prasadnu@amazon.com/Resource"
+   }
+  },
+  "cdkmonitoringpolicyFA836FCC": {
+   "Type": "AWS::IAM::ManagedPolicy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sns:publish",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "cdkmonitoringtopicA6111042"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "",
+    "Path": "/"
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/cdk_monitoring_policy/Resource"
+   }
+  },
+  "cdkmonitoringsnsrole2EEA3FC2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "es.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Ref": "cdkmonitoringpolicyFA836FCC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/cdk_monitoring_sns_role/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11SXW/bMAz8LX1X1KHtUOwxzbYiwNoJTpHXgJbZRI0tGaKUwDD830fLX2ufeHeixCPFO/n4IL/dwJVWujivSpPLdhdAnwVLhxb1nWz3tRabd7tXG6FiXhq9i7nF0GsLylwM+AZ5iYu+aGsipw0E4+yc3INfW9WHVwjPEPAKjVDeXBguD29tQM94ShicjGwd2OupQhvEDnX0JjTP3sU6efgkbC0FsBqHJwfcCVejJQSvT4T+YjTK9qerwCSXA+pECVVeAM/F2GOJwdnf0erUygw4e8Z/oEG/R0/jwVeu0FeGetYJA5VsleOZpsZGlLlhilOc/Crv3g1LL2DhiMVy75PQCbo/ABEGkus+MJdPUZ8xPAGhKBoLlSv4o+fvSqATeOFBkmyzONaPvUqWpTdXm7QFA+DvIe1NPTX/P+86kSG56HnYOlJw1cGPnA1daZO0OeUr5bITTu55G488+P7gbwx1TEuhwEOFvBg92ThbmFRZqCacnL29lz/k95sPMmblow2mQpkN8R+wqdfb8AIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "opensearch-monitor-stack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "MasterUser": {
+   "Description": "Master User Name for Amazon OpenSearch Service",
+   "Value": "opensearch"
+  },
+  "MasterPW": {
+   "Description": "Master User Password for Amazon OpenSearch Service",
+   "Value": "G581FZoTXqbKyuN1!"
+  },
+  "DashboardsURLviaJumphost": {
+   "Description": "Dashboards URL via Jump host",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::GetAtt": [
+        "instanceB7CCE687",
+        "PublicIp"
+       ]
+      }
+     ]
+    ]
+   }
+  },
+  "SNSSubscriptionAlertMessage": {
+   "Description": "Please confirm your SNS subscription receievedt at",
+   "Value": "prasadnu@amazon.com"
+  }
+ },
+ "Parameters": {
+  "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
+   "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+   "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+  },
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

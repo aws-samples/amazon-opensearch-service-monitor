@@ -1,0 +1,3088 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "opensearch-monitor-stack": {
+        "id": "opensearch-monitor-stack",
+        "path": "opensearch-monitor-stack",
+        "children": {
+          "Monitoring VPC": {
+            "id": "Monitoring VPC",
+            "path": "opensearch-monitor-stack/Monitoring VPC",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/Monitoring VPC/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                  "aws:cdk:cloudformation:props": {
+                    "cidrBlock": "10.0.0.0/16",
+                    "enableDnsHostnames": true,
+                    "enableDnsSupport": true,
+                    "instanceTenancy": "default",
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "opensearch-monitor-stack/Monitoring VPC"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnVPC",
+                  "version": "2.74.0"
+                }
+              },
+              "PublicSubnet1": {
+                "id": "PublicSubnet1",
+                "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            0,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.0.0/18",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPublicSubnet1RouteTable01532BA7"
+                        },
+                        "subnetId": {
+                          "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPublicSubnet1RouteTable01532BA7"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "MonitoringVPCIGW8FAED5C8"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "subnetId": {
+                          "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+                        },
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "MonitoringVPCPublicSubnet1EIPF1A54A6D",
+                            "AllocationId"
+                          ]
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                  "version": "2.74.0"
+                }
+              },
+              "PublicSubnet2": {
+                "id": "PublicSubnet2",
+                "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            1,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.64.0/18",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPublicSubnet2RouteTableB7769C92"
+                        },
+                        "subnetId": {
+                          "Ref": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPublicSubnet2RouteTableB7769C92"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "MonitoringVPCIGW8FAED5C8"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "subnetId": {
+                          "Ref": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+                        },
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "MonitoringVPCPublicSubnet2EIPC9A952CD",
+                            "AllocationId"
+                          ]
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                  "version": "2.74.0"
+                }
+              },
+              "PrivateSubnet1": {
+                "id": "PrivateSubnet1",
+                "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            0,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.128.0/18",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPrivateSubnet1RouteTable98993195"
+                        },
+                        "subnetId": {
+                          "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPrivateSubnet1RouteTable98993195"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "MonitoringVPCPublicSubnet1NATGateway2674041D"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                  "version": "2.74.0"
+                }
+              },
+              "PrivateSubnet2": {
+                "id": "PrivateSubnet2",
+                "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            1,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.192.0/18",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPrivateSubnet2RouteTable99597E2E"
+                        },
+                        "subnetId": {
+                          "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "opensearch-monitor-stack/Monitoring VPC/PrivateSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "MonitoringVPCPrivateSubnet2RouteTable99597E2E"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "MonitoringVPCPublicSubnet2NATGateway38706D45"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                  "version": "2.74.0"
+                }
+              },
+              "IGW": {
+                "id": "IGW",
+                "path": "opensearch-monitor-stack/Monitoring VPC/IGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                  "aws:cdk:cloudformation:props": {
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "opensearch-monitor-stack/Monitoring VPC"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnInternetGateway",
+                  "version": "2.74.0"
+                }
+              },
+              "VPCGW": {
+                "id": "VPCGW",
+                "path": "opensearch-monitor-stack/Monitoring VPC/VPCGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                  "aws:cdk:cloudformation:props": {
+                    "vpcId": {
+                      "Ref": "MonitoringVPCFE778483"
+                    },
+                    "internetGatewayId": {
+                      "Ref": "MonitoringVPCIGW8FAED5C8"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnVPCGatewayAttachment",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.Vpc",
+              "version": "2.74.0"
+            }
+          },
+          "OpenSearchSecGrpMonitoring": {
+            "id": "OpenSearchSecGrpMonitoring",
+            "path": "opensearch-monitor-stack/OpenSearchSecGrpMonitoring",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/OpenSearchSecGrpMonitoring/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "groupDescription": "opensearch-monitor-stack/OpenSearchSecGrpMonitoring",
+                    "groupName": "OpenSearchSecGrpMonitoring",
+                    "securityGroupEgress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "description": "Allow all outbound traffic by default",
+                        "ipProtocol": "-1"
+                      }
+                    ],
+                    "securityGroupIngress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "ipProtocol": "tcp",
+                        "fromPort": 80,
+                        "toPort": 80,
+                        "description": "from 0.0.0.0/0:80"
+                      },
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "ipProtocol": "tcp",
+                        "fromPort": 443,
+                        "toPort": 443,
+                        "description": "from 0.0.0.0/0:443"
+                      }
+                    ],
+                    "vpcId": {
+                      "Ref": "MonitoringVPCFE778483"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+              "version": "2.74.0"
+            }
+          },
+          "opensearch-service-monitor": {
+            "id": "opensearch-service-monitor",
+            "path": "opensearch-monitor-stack/opensearch-service-monitor",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/opensearch-service-monitor/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::OpenSearchService::Domain",
+                  "aws:cdk:cloudformation:props": {
+                    "advancedSecurityOptions": {
+                      "enabled": true,
+                      "internalUserDatabaseEnabled": true,
+                      "masterUserOptions": {
+                        "masterUserName": "opensearch",
+                        "masterUserPassword": "G581FZoTXqbKyuN1!"
+                      }
+                    },
+                    "clusterConfig": {
+                      "dedicatedMasterEnabled": false,
+                      "instanceCount": 2,
+                      "instanceType": "m6g.large.search",
+                      "zoneAwarenessEnabled": true,
+                      "zoneAwarenessConfig": {
+                        "availabilityZoneCount": 2
+                      }
+                    },
+                    "domainEndpointOptions": {
+                      "enforceHttps": true,
+                      "tlsSecurityPolicy": "Policy-Min-TLS-1-0-2019-07"
+                    },
+                    "domainName": "amazon-opensearch-monitor",
+                    "ebsOptions": {
+                      "ebsEnabled": true,
+                      "volumeSize": 100,
+                      "volumeType": "gp2"
+                    },
+                    "encryptionAtRestOptions": {
+                      "enabled": true
+                    },
+                    "engineVersion": "OpenSearch_2.3",
+                    "logPublishingOptions": {},
+                    "nodeToNodeEncryptionOptions": {
+                      "enabled": true
+                    },
+                    "vpcOptions": {
+                      "securityGroupIds": [
+                        {
+                          "Fn::GetAtt": [
+                            "OpenSearchSecGrpMonitoring16B9A792",
+                            "GroupId"
+                          ]
+                        }
+                      ],
+                      "subnetIds": [
+                        {
+                          "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+                        },
+                        {
+                          "Ref": "MonitoringVPCPublicSubnet2Subnet2942B0B2"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_opensearchservice.CfnDomain",
+                  "version": "2.74.0"
+                }
+              },
+              "AccessPolicy": {
+                "id": "AccessPolicy",
+                "path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy",
+                "children": {
+                  "Provider": {
+                    "id": "Provider",
+                    "path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/Provider",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.SingletonFunction",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/Resource",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/Resource/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.74.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CustomResource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "CustomResourcePolicy": {
+                    "id": "CustomResourcePolicy",
+                    "path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/CustomResourcePolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "opensearch-monitor-stack/opensearch-service-monitor/AccessPolicy/CustomResourcePolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "es:UpdateDomainConfig",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "opensearchservicemonitorA744B406",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "opensearchservicemonitorAccessPolicyCustomResourcePolicyC29F3A65",
+                            "roles": [
+                              {
+                                "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.74.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.custom_resources.AwsCustomResource",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_opensearchservice.Domain",
+              "version": "2.74.0"
+            }
+          },
+          "AWS679f53fac002430cb0da5b7982bd2287": {
+            "id": "AWS679f53fac002430cb0da5b7982bd2287",
+            "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.74.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/AWS679f53fac002430cb0da5b7982bd2287/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "a9d3d4d1afa000946b9863b3e7578a5a5ad86d88274b3639938aa2baebf822ce.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "index.handler",
+                    "runtime": "nodejs14.x",
+                    "timeout": 120
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.74.0"
+            }
+          },
+          "MasterUser": {
+            "id": "MasterUser",
+            "path": "opensearch-monitor-stack/MasterUser",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.74.0"
+            }
+          },
+          "MasterPW": {
+            "id": "MasterPW",
+            "path": "opensearch-monitor-stack/MasterPW",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.74.0"
+            }
+          },
+          "opensearch-monitor-lambda-timestamp": {
+            "id": "opensearch-monitor-lambda-timestamp",
+            "path": "opensearch-monitor-stack/opensearch-monitor-lambda-timestamp",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/opensearch-monitor-lambda-timestamp/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "domain",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "region",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "domain",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "region",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    },
+                    "tableName": "timestamps"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.74.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "opensearch-monitor-stack/opensearch-monitor-lambda-timestamp/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.74.0"
+            }
+          },
+          "Boto3LambdaLayer": {
+            "id": "Boto3LambdaLayer",
+            "path": "opensearch-monitor-stack/Boto3LambdaLayer",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "opensearch-monitor-stack/Boto3LambdaLayer/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "opensearch-monitor-stack/Boto3LambdaLayer/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "opensearch-monitor-stack/Boto3LambdaLayer/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/Boto3LambdaLayer/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                  "aws:cdk:cloudformation:props": {
+                    "content": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "1467af2822b0ca5a28b26d3aa607010e258b10c0853dbf9a9bc253387cd036df.zip"
+                    },
+                    "compatibleRuntimes": [
+                      "python3.8"
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnLayerVersion",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.LayerVersion",
+              "version": "2.74.0"
+            }
+          },
+          "CWMetricsToOpenSearch": {
+            "id": "CWMetricsToOpenSearch",
+            "path": "opensearch-monitor-stack/CWMetricsToOpenSearch",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          },
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "opensearchmonitorlambdatimestamp76CC1DB8",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "opensearchmonitorlambdatimestamp76CC1DB8",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": "es:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "cloudwatch:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "aoss:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "CWMetricsToOpenSearchServiceRoleDefaultPolicyB9DBB3D2",
+                            "roles": [
+                              {
+                                "Ref": "CWMetricsToOpenSearchServiceRoleF9C3BA90"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.74.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.74.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.74.0"
+                }
+              },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Automatic security group for Lambda Function opensearchmonitorstackCWMetricsToOpenSearch0126C3D9",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/CWMetricsToOpenSearch/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "28d9ba246102d13c8036a144942384f76137c8869de660f5fc7f27492c7a0422.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "CWMetricsToOpenSearchServiceRoleF9C3BA90",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "TABLE": {
+                          "Ref": "opensearchmonitorlambdatimestamp76CC1DB8"
+                        },
+                        "DOMAIN_ENDPOINT": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "https://",
+                              {
+                                "Fn::GetAtt": [
+                                  "opensearchservicemonitorA744B406",
+                                  "DomainEndpoint"
+                                ]
+                              }
+                            ]
+                          ]
+                        },
+                        "DOMAIN_ADMIN_UNAME": "opensearch",
+                        "DOMAIN_ADMIN_PW": "G581FZoTXqbKyuN1!",
+                        "REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ap-south-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ca-central-1\", \"eu-central-1\", \"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-north-1\", \"sa-east-1\"]",
+                        "SERVERLESS_REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"ap-northeast-1\", \"ap-southeast-1\", \"ap-southeast-2\", \"eu-central-1\", \"eu-west-1\"]"
+                      }
+                    },
+                    "functionName": "CWMetricsToOpenSearch_monitoring",
+                    "handler": "handler.handler",
+                    "layers": [
+                      {
+                        "Ref": "Boto3LambdaLayer1677E1BB"
+                      }
+                    ],
+                    "memorySize": 1024,
+                    "runtime": "python3.8",
+                    "timeout": 600,
+                    "vpcConfig": {
+                      "subnetIds": [
+                        {
+                          "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+                        },
+                        {
+                          "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+                        }
+                      ],
+                      "securityGroupIds": [
+                        {
+                          "Fn::GetAtt": [
+                            "CWMetricsToOpenSearchSecurityGroup9EAA548A",
+                            "GroupId"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.74.0"
+            }
+          },
+          "Monitoring": {
+            "id": "Monitoring",
+            "path": "opensearch-monitor-stack/Monitoring",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/Monitoring/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "scheduleExpression": "rate(5 minutes)",
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "CWMetricsToOpenSearch03C14766",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_events.CfnRule",
+                  "version": "2.74.0"
+                }
+              },
+              "AllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D9": {
+                "id": "AllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D9",
+                "path": "opensearch-monitor-stack/Monitoring/AllowEventRuleopensearchmonitorstackCWMetricsToOpenSearch0126C3D9",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWMetricsToOpenSearch03C14766",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "events.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::GetAtt": [
+                        "Monitoring19FB5217",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_events.Rule",
+              "version": "2.74.0"
+            }
+          },
+          "Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain": {
+            "id": "Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain",
+            "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          },
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "es:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "cloudwatch:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "aoss:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRoleDefaultPolicy3F642194",
+                            "roles": [
+                              {
+                                "Ref": "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.74.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.74.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.74.0"
+                }
+              },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Automatic security group for Lambda Function opensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "c44557a7744f2148388afb448fea94fd7ef1aaf82c59509e1e6c18aca4161e1f.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "TABLE": {
+                          "Ref": "opensearchmonitorlambdatimestamp76CC1DB8"
+                        },
+                        "DOMAIN_ENDPOINT": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "https://",
+                              {
+                                "Fn::GetAtt": [
+                                  "opensearchservicemonitorA744B406",
+                                  "DomainEndpoint"
+                                ]
+                              }
+                            ]
+                          ]
+                        },
+                        "DOMAIN_ADMIN_UNAME": "opensearch",
+                        "DOMAIN_ADMIN_PW": "G581FZoTXqbKyuN1!",
+                        "REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ap-south-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ca-central-1\", \"eu-central-1\", \"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-north-1\", \"sa-east-1\"]",
+                        "SERVERLESS_REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"ap-northeast-1\", \"ap-southeast-1\", \"ap-southeast-2\", \"eu-central-1\", \"eu-west-1\"]"
+                      }
+                    },
+                    "functionName": "Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain",
+                    "handler": "handler.handler",
+                    "layers": [
+                      {
+                        "Ref": "Boto3LambdaLayer1677E1BB"
+                      }
+                    ],
+                    "memorySize": 1024,
+                    "runtime": "python3.8",
+                    "timeout": 600,
+                    "vpcConfig": {
+                      "subnetIds": [
+                        {
+                          "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+                        },
+                        {
+                          "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+                        }
+                      ],
+                      "securityGroupIds": [
+                        {
+                          "Fn::GetAtt": [
+                            "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainSecurityGroup31B9C552",
+                            "GroupId"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.74.0"
+            }
+          },
+          "Monitoring DINS": {
+            "id": "Monitoring DINS",
+            "path": "opensearch-monitor-stack/Monitoring DINS",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/Monitoring DINS/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "scheduleExpression": "cron(0 12 * * ? *)",
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainEACC96CF",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_events.CfnRule",
+                  "version": "2.74.0"
+                }
+              },
+              "AllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70": {
+                "id": "AllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70",
+                "path": "opensearch-monitor-stack/Monitoring DINS/AllowEventRuleopensearchmonitorstackDomainIndicesShardsConfigtoOpenSearchmonitoringdomain19F59F70",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainEACC96CF",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "events.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::GetAtt": [
+                        "MonitoringDINS01A68BE7",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_events.Rule",
+              "version": "2.74.0"
+            }
+          },
+          "CWLogsToOpenSearch": {
+            "id": "CWLogsToOpenSearch",
+            "path": "opensearch-monitor-stack/CWLogsToOpenSearch",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          },
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "opensearch-monitor-stack/CWLogsToOpenSearch/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "es:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "logs:*",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "CWLogsToOpenSearchServiceRoleDefaultPolicyCFADFA08",
+                            "roles": [
+                              {
+                                "Ref": "CWLogsToOpenSearchServiceRole49C66B35"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.74.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.74.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "opensearch-monitor-stack/CWLogsToOpenSearch/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.74.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "opensearch-monitor-stack/CWLogsToOpenSearch/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.74.0"
+                }
+              },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/CWLogsToOpenSearch/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Automatic security group for Lambda Function opensearchmonitorstackCWLogsToOpenSearchAEBFCAC1",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "786afed9aa0c04ff262c3a4fd3ffc9d35c246e7590544add4950454957fa7575.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchServiceRole49C66B35",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "DOMAIN_ENDPOINT": {
+                          "Fn::GetAtt": [
+                            "opensearchservicemonitorA744B406",
+                            "DomainEndpoint"
+                          ]
+                        }
+                      }
+                    },
+                    "functionName": "CWLogsToOpenSearch_monitoring",
+                    "handler": "index.handler",
+                    "runtime": "nodejs12.x",
+                    "vpcConfig": {
+                      "subnetIds": [
+                        {
+                          "Ref": "MonitoringVPCPrivateSubnet1Subnet2EDDE3FD"
+                        },
+                        {
+                          "Ref": "MonitoringVPCPrivateSubnet2Subnet6FE979A8"
+                        }
+                      ],
+                      "securityGroupIds": [
+                        {
+                          "Fn::GetAtt": [
+                            "CWLogsToOpenSearchSecurityGroup5F065EE6",
+                            "GroupId"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-us-east-1": {
+                "id": "lambda-cw-logs-permission-us-east-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-east-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:us-east-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-us-east-2": {
+                "id": "lambda-cw-logs-permission-us-east-2",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-east-2",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:us-east-2:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-us-west-1": {
+                "id": "lambda-cw-logs-permission-us-west-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-west-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:us-west-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-us-west-2": {
+                "id": "lambda-cw-logs-permission-us-west-2",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-us-west-2",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:us-west-2:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-ap-south-1": {
+                "id": "lambda-cw-logs-permission-ap-south-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-south-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:ap-south-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-ap-northeast-1": {
+                "id": "lambda-cw-logs-permission-ap-northeast-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-northeast-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:ap-northeast-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-ap-northeast-2": {
+                "id": "lambda-cw-logs-permission-ap-northeast-2",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-northeast-2",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:ap-northeast-2:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-ap-southeast-1": {
+                "id": "lambda-cw-logs-permission-ap-southeast-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-southeast-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:ap-southeast-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-ap-southeast-2": {
+                "id": "lambda-cw-logs-permission-ap-southeast-2",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ap-southeast-2",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:ap-southeast-2:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-ca-central-1": {
+                "id": "lambda-cw-logs-permission-ca-central-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-ca-central-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:ca-central-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-eu-central-1": {
+                "id": "lambda-cw-logs-permission-eu-central-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-central-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:eu-central-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-eu-west-1": {
+                "id": "lambda-cw-logs-permission-eu-west-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:eu-west-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-eu-west-2": {
+                "id": "lambda-cw-logs-permission-eu-west-2",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-2",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:eu-west-2:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-eu-west-3": {
+                "id": "lambda-cw-logs-permission-eu-west-3",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-west-3",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:eu-west-3:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-eu-north-1": {
+                "id": "lambda-cw-logs-permission-eu-north-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-eu-north-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:eu-north-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              },
+              "lambda-cw-logs-permission-sa-east-1": {
+                "id": "lambda-cw-logs-permission-sa-east-1",
+                "path": "opensearch-monitor-stack/CWLogsToOpenSearch/lambda-cw-logs-permission-sa-east-1",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "CWLogsToOpenSearchCE2EB2BE",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "logs.amazonaws.com",
+                    "sourceArn": "arn:aws:logs:sa-east-1:445083327804:*:*:*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.74.0"
+            }
+          },
+          "InstanceSSM": {
+            "id": "InstanceSSM",
+            "path": "opensearch-monitor-stack/InstanceSSM",
+            "children": {
+              "ImportInstanceSSM": {
+                "id": "ImportInstanceSSM",
+                "path": "opensearch-monitor-stack/InstanceSSM/ImportInstanceSSM",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/InstanceSSM/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "ec2.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonSSMManagedInstanceCore"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.74.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "opensearch-monitor-stack/InstanceSSM/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/InstanceSSM/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "es:*",
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "opensearchservicemonitorA744B406",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":s3:::",
+                                      {
+                                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":s3:::",
+                                      {
+                                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "InstanceSSMDefaultPolicy6E4EFE93",
+                        "roles": [
+                          {
+                            "Ref": "InstanceSSMCBFA3CF0"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.74.0"
+            }
+          },
+          "instance": {
+            "id": "instance",
+            "path": "opensearch-monitor-stack/instance",
+            "children": {
+              "InstanceSecurityGroup": {
+                "id": "InstanceSecurityGroup",
+                "path": "opensearch-monitor-stack/instance/InstanceSecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/instance/InstanceSecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "opensearch-monitor-stack/instance/InstanceSecurityGroup",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "securityGroupIngress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 22,
+                            "toPort": 22,
+                            "description": "SSH"
+                          },
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 443,
+                            "toPort": 443,
+                            "description": "HTTPS"
+                          }
+                        ],
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "opensearch-monitor-stack/instance"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "MonitoringVPCFE778483"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                  "version": "2.74.0"
+                }
+              },
+              "InstanceProfile": {
+                "id": "InstanceProfile",
+                "path": "opensearch-monitor-stack/instance/InstanceProfile",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::InstanceProfile",
+                  "aws:cdk:cloudformation:props": {
+                    "roles": [
+                      {
+                        "Ref": "InstanceSSMCBFA3CF0"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnInstanceProfile",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/instance/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::Instance",
+                  "aws:cdk:cloudformation:props": {
+                    "availabilityZone": {
+                      "Fn::Select": [
+                        0,
+                        {
+                          "Fn::GetAZs": ""
+                        }
+                      ]
+                    },
+                    "iamInstanceProfile": {
+                      "Ref": "instanceInstanceProfile931F14E3"
+                    },
+                    "imageId": {
+                      "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter"
+                    },
+                    "instanceType": "t3.nano",
+                    "securityGroupIds": [
+                      {
+                        "Fn::GetAtt": [
+                          "instanceInstanceSecurityGroup725C795D",
+                          "GroupId"
+                        ]
+                      }
+                    ],
+                    "subnetId": {
+                      "Ref": "MonitoringVPCPublicSubnet1Subnet86C63F1C"
+                    },
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "opensearch-monitor-stack/instance"
+                      }
+                    ],
+                    "userData": {
+                      "Fn::Base64": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "#!/bin/bash\nmkdir -p $(dirname '/tmp/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson')\naws s3 cp 's3://",
+                            {
+                              "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                            },
+                            "/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson' '/tmp/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson'\nmkdir -p $(dirname '/tmp/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson')\naws s3 cp 's3://",
+                            {
+                              "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                            },
+                            "/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson' '/tmp/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson'\nmkdir -p $(dirname '/tmp/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf')\naws s3 cp 's3://",
+                            {
+                              "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                            },
+                            "/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf' '/tmp/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf'\nmkdir -p $(dirname '/tmp/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh')\naws s3 cp 's3://",
+                            {
+                              "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                            },
+                            "/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh' '/tmp/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh'\nyum update -y\nyum install jq -y\namazon-linux-extras install nginx1.12\nmkdir -p /home/ec2-user/assets\ncd /home/ec2-user/assets\nmv /tmp/a1ec00ab8571296799b9bb795e21395d9c0f5f487bfccbd2f05d40ad573e56ad.ndjson export_opensearch_dashboards_V1_0.ndjson\nmv /tmp/68bf909cbec210c878856255f063daa7f231acaf5563d2aed54375a4712932f7.ndjson export_domain_indices_shards_config.ndjson\nmv /tmp/adb6771f7bbbd183a8e7258c3edc86e9bdc1dcfb50005cbc1fe3373b84f20201.conf nginx_opensearch.conf\nmv /tmp/63291d6b3ef631701100fa625e4c2f31a4ee0ec51ed81ef48a307c2ce06b5672.sh create_alerts.sh\nopenssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\ncp nginx_opensearch.conf /etc/nginx/conf.d/\nsed -i 's/DEFAULT_DOMAIN_NAME/amazon-opensearch-monitor/g' /home/ec2-user/assets/export_opensearch_dashboards_V1_0.ndjson\nsed -i 's/DEFAULT_DOMAIN_NAME/amazon-opensearch-monitor/g' /home/ec2-user/assets/export_domain_indices_shards_config.ndjson\nsed -i 's/DOMAIN_ENDPOINT/",
+                            {
+                              "Fn::GetAtt": [
+                                "opensearchservicemonitorA744B406",
+                                "DomainEndpoint"
+                              ]
+                            },
+                            "/g' /etc/nginx/conf.d/nginx_opensearch.conf\nsed -i 's/DOMAIN_ENDPOINT/",
+                            {
+                              "Fn::GetAtt": [
+                                "opensearchservicemonitorA744B406",
+                                "DomainEndpoint"
+                              ]
+                            },
+                            "/g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=",
+                            {
+                              "Fn::GetAtt": [
+                                "CWLogsToOpenSearchServiceRole49C66B35",
+                                "Arn"
+                              ]
+                            },
+                            "=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=SNS_ROLE_ARN=",
+                            {
+                              "Fn::GetAtt": [
+                                "cdkmonitoringsnsrole2EEA3FC2",
+                                "Arn"
+                              ]
+                            },
+                            "=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's/SNS_TOPIC_ARN/",
+                            {
+                              "Ref": "cdkmonitoringtopicA6111042"
+                            },
+                            "/g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_UNAME=opensearch=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_PW=G581FZoTXqbKyuN1!=g' /home/ec2-user/assets/create_alerts.sh\nsystemctl restart nginx.service\nchmod 500 create_alerts.sh\nsleep 5\nbash --verbose create_alerts.sh"
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnInstance",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.Instance",
+              "version": "2.74.0"
+            }
+          },
+          "SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": {
+            "id": "SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter",
+            "path": "opensearch-monitor-stack/SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.74.0"
+            }
+          },
+          "SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118": {
+            "id": "SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118",
+            "path": "opensearch-monitor-stack/SsmParameterValue:--aws--service--ami-amazon-linux-latest--amzn2-ami-hvm-x86_64-gp2:C96584B6-F00A-464E-AD19-53AFF4B05118",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.74.0"
+            }
+          },
+          "cdk_monitoring_topic": {
+            "id": "cdk_monitoring_topic",
+            "path": "opensearch-monitor-stack/cdk_monitoring_topic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/cdk_monitoring_topic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.74.0"
+                }
+              },
+              "prasadnu@amazon.com": {
+                "id": "prasadnu@amazon.com",
+                "path": "opensearch-monitor-stack/cdk_monitoring_topic/prasadnu@amazon.com",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "opensearch-monitor-stack/cdk_monitoring_topic/prasadnu@amazon.com/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "protocol": "email",
+                        "topicArn": {
+                          "Ref": "cdkmonitoringtopicA6111042"
+                        },
+                        "endpoint": "prasadnu@amazon.com"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                      "version": "2.74.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.Subscription",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.74.0"
+            }
+          },
+          "cdk_monitoring_policy": {
+            "id": "cdk_monitoring_policy",
+            "path": "opensearch-monitor-stack/cdk_monitoring_policy",
+            "children": {
+              "Importedcdk_monitoring_policy": {
+                "id": "Importedcdk_monitoring_policy",
+                "path": "opensearch-monitor-stack/cdk_monitoring_policy/Importedcdk_monitoring_policy",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/cdk_monitoring_policy/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::ManagedPolicy",
+                  "aws:cdk:cloudformation:props": {
+                    "policyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sns:publish",
+                          "Effect": "Allow",
+                          "Resource": {
+                            "Ref": "cdkmonitoringtopicA6111042"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "description": "",
+                    "path": "/"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnManagedPolicy",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.ManagedPolicy",
+              "version": "2.74.0"
+            }
+          },
+          "cdk_monitoring_sns_role": {
+            "id": "cdk_monitoring_sns_role",
+            "path": "opensearch-monitor-stack/cdk_monitoring_sns_role",
+            "children": {
+              "Importcdk_monitoring_sns_role": {
+                "id": "Importcdk_monitoring_sns_role",
+                "path": "opensearch-monitor-stack/cdk_monitoring_sns_role/Importcdk_monitoring_sns_role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.74.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "opensearch-monitor-stack/cdk_monitoring_sns_role/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "es.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Ref": "cdkmonitoringpolicyFA836FCC"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.74.0"
+            }
+          },
+          "DashboardsAsset": {
+            "id": "DashboardsAsset",
+            "path": "opensearch-monitor-stack/DashboardsAsset",
+            "children": {
+              "Stage": {
+                "id": "Stage",
+                "path": "opensearch-monitor-stack/DashboardsAsset/Stage",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.74.0"
+                }
+              },
+              "AssetBucket": {
+                "id": "AssetBucket",
+                "path": "opensearch-monitor-stack/DashboardsAsset/AssetBucket",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+              "version": "2.74.0"
+            }
+          },
+          "DashboardsAssetNew": {
+            "id": "DashboardsAssetNew",
+            "path": "opensearch-monitor-stack/DashboardsAssetNew",
+            "children": {
+              "Stage": {
+                "id": "Stage",
+                "path": "opensearch-monitor-stack/DashboardsAssetNew/Stage",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.74.0"
+                }
+              },
+              "AssetBucket": {
+                "id": "AssetBucket",
+                "path": "opensearch-monitor-stack/DashboardsAssetNew/AssetBucket",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+              "version": "2.74.0"
+            }
+          },
+          "NginxAsset": {
+            "id": "NginxAsset",
+            "path": "opensearch-monitor-stack/NginxAsset",
+            "children": {
+              "Stage": {
+                "id": "Stage",
+                "path": "opensearch-monitor-stack/NginxAsset/Stage",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.74.0"
+                }
+              },
+              "AssetBucket": {
+                "id": "AssetBucket",
+                "path": "opensearch-monitor-stack/NginxAsset/AssetBucket",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+              "version": "2.74.0"
+            }
+          },
+          "AlertingAsset": {
+            "id": "AlertingAsset",
+            "path": "opensearch-monitor-stack/AlertingAsset",
+            "children": {
+              "Stage": {
+                "id": "Stage",
+                "path": "opensearch-monitor-stack/AlertingAsset/Stage",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.74.0"
+                }
+              },
+              "AssetBucket": {
+                "id": "AssetBucket",
+                "path": "opensearch-monitor-stack/AlertingAsset/AssetBucket",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+              "version": "2.74.0"
+            }
+          },
+          "Dashboards URL (via Jump host)": {
+            "id": "Dashboards URL (via Jump host)",
+            "path": "opensearch-monitor-stack/Dashboards URL (via Jump host)",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.74.0"
+            }
+          },
+          "SNS Subscription Alert Message": {
+            "id": "SNS Subscription Alert Message",
+            "path": "opensearch-monitor-stack/SNS Subscription Alert Message",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.74.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "opensearch-monitor-stack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "opensearch-monitor-stack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.74.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "opensearch-monitor-stack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.310"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "opensearch-monitor-stack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.74.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "opensearch-monitor-stack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.74.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.74.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.310"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.74.0"
+    }
+  }
+}

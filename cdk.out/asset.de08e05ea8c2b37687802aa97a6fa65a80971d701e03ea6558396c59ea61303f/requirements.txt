@@ -1,0 +1,8 @@
+pytz
+requests
+certifi
+chardet
+idna
+requests_aws4auth
+urllib3
+six

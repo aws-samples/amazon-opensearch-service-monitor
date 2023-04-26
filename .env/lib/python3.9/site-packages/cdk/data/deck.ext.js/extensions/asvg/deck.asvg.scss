@@ -1,0 +1,61 @@
+@mixin border-radius($r) {
+    -webkit-border-radius:$r;
+    -moz-border-radius:$r;
+    border-radius:$r;
+}
+
+@mixin box-shadow($x, $y, $blur, $color) {
+    -webkit-box-shadow:$x $y $blur $color;
+    -moz-box-shadow:$x $y $blur $color;
+    box-shadow:$x $y $blur $color;
+}
+
+@mixin opacity($alpha) {
+    -moz-opacity: $alpha; 
+    filter: alpha(opacity=$alpha*100);
+    opacity: $alpha;
+}
+
+.deck-container {
+    .deck-svg {
+        display: block;
+        background-color: white;
+        @include border-radius(2px);
+        @box-shadow box-shadow(1px, 1px, 10px, black);
+        
+        .deck-svg-button {
+            display: inline-block;
+            text-align: center;
+            width: 24px;
+            height: 24px;
+            cursor: hand;
+        }
+        
+        .deck-svg-control {
+            text-align: right;
+            width: 100%;
+            @include opacity(0.5);
+        }
+        
+        #deck-svg-reload {
+            background: url('reload.png') no-repeat center center;
+            background-size: 80%;
+        }
+        
+        #deck-svg-next {
+            background: url('next.png') no-repeat center center;
+            background-size: 80%;
+            
+            &.disabled {
+                @include opacity(0.2);
+                cursor: default;
+            }
+        }
+    }
+}
+
+@media print {
+    .deck-svg {
+        
+    }
+}

@@ -1,0 +1,4 @@
+[console_scripts]
+b64 = cdk.b64:run
+cdk = cdk:main
+

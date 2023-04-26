@@ -1,0 +1,137 @@
+@mixin border-radius($r) {
+    -webkit-border-radius:$r;
+    -moz-border-radius:$r;
+    border-radius:$r;
+}
+
+@mixin box-shadow($x, $y, $blur, $color) {
+    -webkit-box-shadow:$x $y $blur $color;
+    -moz-box-shadow:$x $y $blur $color;
+    box-shadow:$x $y $blur $color;
+}
+
+@mixin translate($x: 0, $y: 0, $z: 0) {
+    -webkit-transform:translate3d($x, $y, $z);
+    -moz-transform:translate($x, $y);
+    -ms-transform:translate($x, $y);
+    -o-transform:translate($x, $y);
+    transform:translate3d($x, $y, $z);
+}
+
+@mixin transition($prop, $duration, $easing: ease-in-out, $delay: 0ms) {
+    -webkit-transition:$prop $duration $easing $delay;
+    -moz-transition:$prop $duration $easing $delay;
+    -ms-transition:$prop $duration $easing $delay;
+    -o-transition:$prop $duration $easing $delay;
+    transition:$prop $duration $easing $delay;
+}
+
+@mixin transform($val) {
+    -webkit-transform:$val;
+    -moz-transform:$val;
+    -ms-transform:$val;
+    -o-transform:$val;
+    transform:$val;
+}
+
+@media screen {
+      
+.deck-container {
+    
+    /********************** html tags ***************************/
+    
+    table {
+        display: table !important;
+        
+        tr {
+            display: table-row;
+            width: 100%;
+        }
+        
+        td {
+            display: table-cell;
+        }
+    }
+    
+    /********************** deck tags ***************************/
+    
+    .deck-status, .deck-toc-status {
+        height: 22px;
+        td {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+    }
+    
+    .deck-toc-status {    
+        .deck-toc-h2 { width: 50%}
+        .deck-toc-h3 { width: 50%}    
+    }
+    
+    /********************** slides tags ***************************/
+    
+    #title-slide {
+        h1{ 
+            margin-top: 200px;
+        }
+        
+        .info {
+            text-shadow: none;
+        }
+    }
+    
+    /********************** asvg tags** ***************************/
+    
+    .half {
+        width: 40%;
+        display: inline-block
+    }
+    
+    /********************** custom tags ***************************/
+    .centerbox {
+        display: block;
+        position: relative;
+        text-align: center;
+    }
+    
+    .left {
+        text-align: left;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .right {
+        text-align: right;
+    }
+}}
+
+
+@media print {
+    * {
+        background: transparent !important;
+        color: black !important;
+    }
+    
+    a, a:visited { text-decoration: none; }
+    pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+    @page { margin: 0.5cm; }
+    p, h2, h3 { orphans: 3; widows: 3; }
+    h2, h3{ page-break-after: avoid; }
+    
+    header, footer, #intro p, .goto-form, .deck-prev-link, .deck-next-link, .deck-status {
+        display: none;
+    }
+    
+    article {
+        width:auto !important;
+        font-size:12pt;
+        
+        > .slide {
+            page-break-after: always;
+        }
+    }
+}

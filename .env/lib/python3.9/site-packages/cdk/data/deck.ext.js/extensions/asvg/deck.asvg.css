@@ -1,0 +1,30 @@
+.deck-container .deck-svg {
+  display: block;
+  background-color: white;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+@box-shadow box-shadow(1px, 1px, 10px, black); }
+  .deck-container .deck-svg .deck-svg-button {
+    display: inline-block;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    cursor: hand; }
+  .deck-container .deck-svg .deck-svg-control {
+    text-align: right;
+    width: 100%;
+    -moz-opacity: 0.5;
+    filter: alpha(opacity=50);
+    opacity: 0.5; }
+  .deck-container .deck-svg #deck-svg-reload {
+    background: url("reload.png") no-repeat center center;
+    background-size: 80%; }
+  .deck-container .deck-svg #deck-svg-next {
+    background: url("next.png") no-repeat center center;
+    background-size: 80%; }
+    .deck-container .deck-svg #deck-svg-next.disabled {
+      -moz-opacity: 0.2;
+      filter: alpha(opacity=20);
+      opacity: 0.2;
+      cursor: default; }

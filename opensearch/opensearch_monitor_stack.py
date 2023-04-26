@@ -24,16 +24,21 @@ import os
 import random
 import string
 import sys
+from aws_cdk.aws_events import Rule, Schedule
+
+
 
 # Jump host specific settings, change key name if you need an existing key to be used
 EC2_KEY_NAME = 'amazon_opensearch_monitoring'
 EC2_INSTANCE_TYPE = 't3.nano'
 
 # Fill this in with a valid email to receive SNS notifications.
-SNS_NOTIFICATION_EMAIL = 'user@example.com'
+SNS_NOTIFICATION_EMAIL = 'prasadnu@amazon.com'
 
 # Lambda Interval Settings (seconds)
 LAMBDA_INTERVAL = 300
+# Lambda Interval Settings (seconds) for Daily - 24 hrs interval
+LAMBDA_INTERVAL_DINS = 86400
 
 # OpenSearch and Dashboards specific constants 
 DOMAIN_NAME = 'amazon-opensearch-monitor'
@@ -202,6 +207,52 @@ class OpenSearchMonitor(Stack):
             enabled=True,
             schedule=lambda_schedule,
             targets=[event_lambda_target])
+        ###################################################################################
+
+        # Lambda function to push Domain, Indices, Nodes, Shard (DINS) config to OpenSearch
+        # March 2023
+
+        lambda_func_DINS = lambda_.Function(
+            self, 'Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain',
+            function_name="Domain_Indices_Shards_Config_to_OpenSearch_monitoring_domain",
+            runtime=lambda_.Runtime.PYTHON_3_8,
+            code=lambda_.Code.from_asset('Domain_Indices_Shards_Config_to_OpenSearch'),
+            handler='handler.handler',
+            memory_size=1024,
+            layers=[boto3_lambda_layer],
+            timeout=Duration.minutes(10),
+            vpc=vpc
+        )
+
+        # table.grant_read_data(lambda_func)
+        # table.grant_write_data(lambda_func)
+        lambda_func_DINS.add_environment('TABLE', table.table_name)
+        lambda_func_DINS.add_environment('DOMAIN_ENDPOINT', 'https://' + domain.domain_endpoint)
+        lambda_func_DINS.add_environment('DOMAIN_ADMIN_UNAME', DOMAIN_ADMIN_UNAME)
+        lambda_func_DINS.add_environment('DOMAIN_ADMIN_PW', DOMAIN_ADMIN_PW)
+        lambda_func_DINS.add_environment('REGIONS', REGIONS_TO_MONITOR)
+        lambda_func_DINS.add_environment('SERVERLESS_REGIONS', SERVERLESS_REGIONS_TO_MONITOR)
+
+        # When the domain is created here, restrict access
+        lambda_func_DINS.add_to_role_policy(iam.PolicyStatement(actions=['es:*'],
+                                                           resources=['*']))
+
+        # The function needs to read CW events. Restrict
+        lambda_func_DINS.add_to_role_policy(iam.PolicyStatement(actions=['cloudwatch:*'],
+                                                           resources=['*']))
+
+        # The function needs to read CW events. Restrict
+        lambda_func_DINS.add_to_role_policy(iam.PolicyStatement(actions=['aoss:*'],
+                                                           resources=['*']))
+
+        lambda_DINS_schedule = events.Schedule.rate(Duration.seconds(LAMBDA_INTERVAL_DINS))
+        event_lambda_DINS_target = targets.LambdaFunction(handler=lambda_func_DINS)
+        events.Rule(
+            self,
+            "Monitoring DINS",
+            enabled=True,
+            schedule=Schedule.cron(minute="0", hour="12"),
+            targets=[event_lambda_DINS_target])
 
         ################################################################################
         # Lambda for CW Logs
@@ -292,6 +343,14 @@ class OpenSearchMonitor(Stack):
             bucket_key=dashboards_asset.s3_object_key,
         )
 
+        dashboards_asset_new = Asset(self, "DashboardsAssetNew",
+                                 path=os.path.join(dirname, 'export_domain_indices_shards_config.ndjson'))
+        dashboards_asset_new.grant_read(instance.role)
+        dashboards_asset_path_new = instance.user_data.add_s3_download_command(
+            bucket=dashboards_asset_new.bucket,
+            bucket_key=dashboards_asset_new.s3_object_key,
+        )
+
         nginx_asset = Asset(self, "NginxAsset", path=os.path.join(dirname, 'nginx_opensearch.conf'))
         nginx_asset.grant_read(instance.role)
         nginx_asset_path = instance.user_data.add_s3_download_command(
@@ -313,15 +372,18 @@ class OpenSearchMonitor(Stack):
             "mkdir -p /home/ec2-user/assets",
             "cd /home/ec2-user/assets",
             "mv {} export_opensearch_dashboards_V1_0.ndjson".format(dashboards_asset_path),
+            "mv {} export_domain_indices_shards_config.ndjson".format(dashboards_asset_path_new),
             "mv {} nginx_opensearch.conf".format(nginx_asset_path),
             "mv {} create_alerts.sh".format(alerting_asset_path),
 
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
             "cp nginx_opensearch.conf /etc/nginx/conf.d/",
             "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /home/ec2-user/assets/export_opensearch_dashboards_V1_0.ndjson",
+            "sed -i 's/DEFAULT_DOMAIN_NAME/" + DOMAIN_NAME + "/g' /home/ec2-user/assets/export_domain_indices_shards_config.ndjson",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /etc/nginx/conf.d/nginx_opensearch.conf",
             "sed -i 's/DOMAIN_ENDPOINT/" + domain.domain_endpoint + "/g' /home/ec2-user/assets/create_alerts.sh",
             "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_cw_logs.role.role_arn + "=g' /home/ec2-user/assets/create_alerts.sh",
+            "sed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=" + lambda_func_DINS.role.role_arn + "=g' /home/ec2-user/assets/create_alerts.sh",
             "sed -i 's=SNS_ROLE_ARN=" + sns_role.role_arn + "=g' /home/ec2-user/assets/create_alerts.sh",
             "sed -i 's/SNS_TOPIC_ARN/" + sns_topic.topic_arn + "/g' /home/ec2-user/assets/create_alerts.sh",
             "sed -i 's=DOMAIN_ADMIN_UNAME=" + DOMAIN_ADMIN_UNAME + "=g' /home/ec2-user/assets/create_alerts.sh",
