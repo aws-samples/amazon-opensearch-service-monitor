@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a8874f65891703ce678ab9cda1e81dc0ac52d3d9149d66d1d9858732c57c1428.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/de9358d100b2de936782d0f0ae7086e80897ace610aeb64360c67422fca49f9b.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -194,17 +194,17 @@
             "type": "aws:cdk:warning",
             "data": "installLatestAwsSdk was not specified, and defaults to true. You probably do not want this. Set the global context flag '@aws-cdk/customresources:installLatestAwsSdkDefault' to false to switch this behavior off project-wide, or set the property explicitly to true if you know you need to call APIs that are not in Lambda's built-in SDK version.",
             "trace": [
-              "Annotations.addMessage (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/core/lib/annotations.js:86:29)",
-              "Annotations.addWarning (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/core/lib/annotations.js:34:14)",
-              "new AwsCustomResource (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/custom-resources/lib/aws-custom-resource/aws-custom-resource.js:201:41)",
-              "new OpenSearchAccessPolicy (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/aws-opensearchservice/lib/opensearch-access-policy.js:12:9)",
-              "Domain.addAccessPolicies (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/aws-opensearchservice/lib/domain.js:811:37)",
-              "new Domain (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-mwDCvT/node_modules/aws-cdk-lib/aws-opensearchservice/lib/domain.js:782:18)",
-              "Kernel._create (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:9964:29)",
-              "Kernel.create (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:9693:29)",
-              "KernelHost.processRequest (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:11544:36)",
-              "KernelHost.run (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:11504:22)",
-              "Immediate._onImmediate (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpxmikv34h/lib/program.js:11505:46)",
+              "Annotations.addMessage (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-qqgvAV/node_modules/aws-cdk-lib/core/lib/annotations.js:86:29)",
+              "Annotations.addWarning (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-qqgvAV/node_modules/aws-cdk-lib/core/lib/annotations.js:34:14)",
+              "new AwsCustomResource (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-qqgvAV/node_modules/aws-cdk-lib/custom-resources/lib/aws-custom-resource/aws-custom-resource.js:201:41)",
+              "new OpenSearchAccessPolicy (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-qqgvAV/node_modules/aws-cdk-lib/aws-opensearchservice/lib/opensearch-access-policy.js:12:9)",
+              "Domain.addAccessPolicies (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-qqgvAV/node_modules/aws-cdk-lib/aws-opensearchservice/lib/domain.js:811:37)",
+              "new Domain (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/jsii-kernel-qqgvAV/node_modules/aws-cdk-lib/aws-opensearchservice/lib/domain.js:782:18)",
+              "Kernel._create (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpx_vxlfiw/lib/program.js:9964:29)",
+              "Kernel.create (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpx_vxlfiw/lib/program.js:9693:29)",
+              "KernelHost.processRequest (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpx_vxlfiw/lib/program.js:11544:36)",
+              "KernelHost.run (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpx_vxlfiw/lib/program.js:11504:22)",
+              "Immediate._onImmediate (/private/var/folders/x0/pqth6mjd5fz04tgx0s89dh7w0000gr/T/tmpx_vxlfiw/lib/program.js:11505:46)",
               "process.processImmediate (node:internal/timers:478:21)"
             ]
           }

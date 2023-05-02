@@ -375,6 +375,7 @@ class OpenSearchMonitor(Stack):
             "mv {} export_domain_indices_shards_config.ndjson".format(dashboards_asset_path_new),
             "mv {} nginx_opensearch.conf".format(nginx_asset_path),
             "mv {} create_alerts.sh".format(alerting_asset_path),
+            
 
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
             "cp nginx_opensearch.conf /etc/nginx/conf.d/",

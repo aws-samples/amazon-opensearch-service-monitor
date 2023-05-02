@@ -717,7 +717,7 @@
                       "internalUserDatabaseEnabled": true,
                       "masterUserOptions": {
                         "masterUserName": "opensearch",
-                        "masterUserPassword": "G581FZoTXqbKyuN1!"
+                        "masterUserPassword": "Xs7f7q05vtN0PkC2!"
                       }
                     },
                     "clusterConfig": {
@@ -1374,7 +1374,7 @@
                           ]
                         },
                         "DOMAIN_ADMIN_UNAME": "opensearch",
-                        "DOMAIN_ADMIN_PW": "G581FZoTXqbKyuN1!",
+                        "DOMAIN_ADMIN_PW": "Xs7f7q05vtN0PkC2!",
                         "REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ap-south-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ca-central-1\", \"eu-central-1\", \"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-north-1\", \"sa-east-1\"]",
                         "SERVERLESS_REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"ap-northeast-1\", \"ap-southeast-1\", \"ap-southeast-2\", \"eu-central-1\", \"eu-west-1\"]"
                       }
@@ -1703,7 +1703,7 @@
                           ]
                         },
                         "DOMAIN_ADMIN_UNAME": "opensearch",
-                        "DOMAIN_ADMIN_PW": "G581FZoTXqbKyuN1!",
+                        "DOMAIN_ADMIN_PW": "Xs7f7q05vtN0PkC2!",
                         "REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ap-south-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ca-central-1\", \"eu-central-1\", \"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-north-1\", \"sa-east-1\"]",
                         "SERVERLESS_REGIONS": "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"ap-northeast-1\", \"ap-southeast-1\", \"ap-southeast-2\", \"eu-central-1\", \"eu-west-1\"]"
                       }
@@ -2715,6 +2715,13 @@
                                 "Arn"
                               ]
                             },
+                            "=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=LAMBDA_CW_LOGS_ROLE_ARN=",
+                            {
+                              "Fn::GetAtt": [
+                                "DomainIndicesShardsConfigtoOpenSearchmonitoringdomainServiceRole7D9F417C",
+                                "Arn"
+                              ]
+                            },
                             "=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=SNS_ROLE_ARN=",
                             {
                               "Fn::GetAtt": [
@@ -2726,7 +2733,7 @@
                             {
                               "Ref": "cdkmonitoringtopicA6111042"
                             },
-                            "/g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_UNAME=opensearch=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_PW=G581FZoTXqbKyuN1!=g' /home/ec2-user/assets/create_alerts.sh\nsystemctl restart nginx.service\nchmod 500 create_alerts.sh\nsleep 5\nbash --verbose create_alerts.sh"
+                            "/g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_UNAME=opensearch=g' /home/ec2-user/assets/create_alerts.sh\nsed -i 's=DOMAIN_ADMIN_PW=Xs7f7q05vtN0PkC2!=g' /home/ec2-user/assets/create_alerts.sh\nsystemctl restart nginx.service\nchmod 500 create_alerts.sh\nsleep 5\nbash --verbose create_alerts.sh"
                           ]
                         ]
                       }
