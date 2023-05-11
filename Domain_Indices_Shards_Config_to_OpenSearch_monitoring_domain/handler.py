@@ -88,7 +88,7 @@ def send_all_domain_config_values(values):
     
     for domain_ in doms_config:
         domain_['@timestamp'] = current_date_time
-        domain_['native_domain'] = domain_['DomainName']
+        domain_['domain_name'] = domain_['DomainName']
         body_ += action+"\n"+json.dumps(domain_)+"\n" 
         
     
@@ -528,7 +528,7 @@ def send_all_domain_config_values(values):
             }
           }
         },
-        "native_domain" : {
+        "domain_name" : {
           "type" : "text",
           "fields" : {
             "keyword" : {
@@ -558,10 +558,10 @@ def send_all_domain_config_values(values):
 def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
 
     credentials = session.get_credentials()
-    region = 'us-east-1'
+    
     service = 'execute-api'
     
-    awsauth = AWSV4SignerAuth(credentials, region)
+    
     
     headers = { "Content-Type": "application/json"}
     
@@ -598,7 +598,7 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             }
           }
         },
-        "native_domain" : {
+        "domain_name" : {
           "type" : "text",
           "fields" : {
             "keyword" : {
@@ -690,7 +690,7 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             }
           }
         },
-        "native_domain" : {
+        "domain_name" : {
           "type" : "text",
           "fields" : {
             "keyword" : {
@@ -769,7 +769,7 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             }
           }
         },
-        "native_domain" : {
+        "domain_name" : {
           "type" : "text",
           "fields" : {
             "keyword" : {
@@ -842,11 +842,13 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
         if('Endpoint' in domain):
             endpoint = domain['Endpoint']
         else:
-            endpoint = domain['Endpoints']['vpc']
+            endpoint = domain['Endpoints']['vpc']   
+            
+        region = domain['ARN'].split(':')[3]
+        awsauth = AWSV4SignerAuth(credentials, region)
         
         
-        body_=''
-        action = json.dumps({ "index": { "_index": "domain_indices_configuration-"+today_} })
+        
         
         # Connect to the candidate domain
         
@@ -859,6 +861,17 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
         connection_class = RequestsHttpConnection
         )
         
+        
+        domain_nodes_stats = client.cluster.stats()
+        domain_nodes = domain_nodes_stats['_nodes']['total']
+        heap_per_node = domain_nodes_stats['nodes']['jvm']['mem']['heap_max_in_bytes']/domain_nodes
+        max_shards_per_node = (heap_per_node/(1024*1024*1024))*25
+        
+        
+        
+        body_=''
+        action = json.dumps({ "index": { "_index": "domain_indices_configuration-"+today_} })
+        
         response = client.cat.indices(bytes='b')[:-1]
         
         print('connection successful with '+ domain['DomainName'] + ' domain')
@@ -870,7 +883,7 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
         
         for i in indices:
             arr = i.split()
-            indices_dic['native_domain'] = domain['DomainName']
+            indices_dic['domain_name'] = domain['DomainName']
             indices_dic['health'] = arr[0]
             indices_dic['status'] = arr[1]
             indices_dic['index_name'] = arr[2]
@@ -882,6 +895,10 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             indices_dic['total_storage'] = arr[8]
             indices_dic['primary_storage'] = arr[9]
             indices_dic['shard_size'] = int(indices_dic['primary_storage'])/int(indices_dic['primary_shards'])
+            if int(indices_dic['primary_shards'])%int(domain['ClusterConfig']['InstanceCount']) == 0:
+              indices_dic['is_unevenly_distributed'] = 0
+            else:
+              indices_dic['is_unevenly_distributed'] = 1
             indices_dic['@timestamp'] = current_date_time
             body_ += action+"\n"+json.dumps(indices_dic)+"\n" 
                     
@@ -914,7 +931,7 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             if len(arr)<9:
                 continue
             allocation_dic = {}
-            allocation_dic['native_domain'] = domain['DomainName']
+            allocation_dic['domain_name'] = domain['DomainName']
             allocation_dic['number_of_shards'] = arr[0]
             allocation_dic['indices_disk_space_occupied'] = float(arr[1])
             indices_disk_space_occupied.append(float(arr[1]))
@@ -929,6 +946,8 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             allocation_dic['EBSEnabled'] = domain['EBSOptions']['EBSEnabled']
             allocation_dic['VolumeType'] = domain['EBSOptions']['VolumeType']
             allocation_dic['VolumeSize'] = domain['EBSOptions']['VolumeSize']
+            allocation_dic['max_heap_memory'] = heap_per_node
+            allocation_dic['max_shards'] = max_shards_per_node
             allocation_dic['@timestamp'] = current_date_time
             bulk_body.append(allocation_dic)
         
@@ -970,7 +989,7 @@ def send_all_domain_indices_shard_allocation_config_values(values,doms_config):
             arr = i.split()
             if len(arr)<8:
                 continue
-            shards_dic['native_domain'] = domain['DomainName']
+            shards_dic['domain_name'] = domain['DomainName']
             shards_dic['index_name'] = arr[0]
             shards_dic['shard_num_in_index'] = arr[1]
             shards_dic['primary_or_replica'] = arr[2]

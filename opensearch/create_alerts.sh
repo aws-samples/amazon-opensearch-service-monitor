@@ -13,6 +13,7 @@ sed -i 's/CHANGE_ORIGIN_URL/'$InstanceIP'/g' /home/ec2-user/assets/export_opense
 
 # Create backend role to load CW logs using lambda
 curl -s -XPATCH -u DOMAIN_ADMIN_UNAME:DOMAIN_ADMIN_PW 'https://DOMAIN_ENDPOINT/_opendistro/_security/api/rolesmapping/all_access' -H 'Content-Type: application/json' -d '[ {"op":"add","path":"/backend_roles","value":["LAMBDA_CW_LOGS_ROLE_ARN"]} ] '
+curl -s -XPATCH -u DOMAIN_ADMIN_UNAME:DOMAIN_ADMIN_PW 'https://DOMAIN_ENDPOINT/_opendistro/_security/api/rolesmapping/all_access' -H 'Content-Type: application/json' -d '[ {"op":"add","path":"/backend_roles","value":["LAMBDA_DINS_ROLE_ARN"]} ] '
 
 # Generate auth for Default Dashboards
 curl -XPOST 'https://DOMAIN_ENDPOINT/_dashboards/auth/login' -H "osd-xsrf: true" -H "content-type:application/json" -d '{"username":"DOMAIN_ADMIN_UNAME", "password" : "DOMAIN_ADMIN_PW"} ' -c auth.txt
