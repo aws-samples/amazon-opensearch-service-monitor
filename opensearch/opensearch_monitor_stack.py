@@ -208,7 +208,7 @@ class OpenSearchMonitor(Stack):
         lambda_func_cw_logs = lambda_.Function(
             self, 'CWLogsToOpenSearch',
             function_name="CWLogsToOpenSearch_monitoring",
-            runtime=lambda_.Runtime.NODEJS_12_X,
+            runtime=lambda_.Runtime.NODEJS_18_X,
             code=lambda_.Code.from_asset('CWLogsToOpenSearch'),
             handler='index.handler',
             vpc=vpc
